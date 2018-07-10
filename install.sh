@@ -5,16 +5,19 @@ readonly TMP_DIR="/tmp/"
 readonly UTIL="util.sh"
 
 function main() {
-  
   source ${UTIL}  
-  check_install
 
-  manual
-  echo "Hello World!"
+  git
+  manual "Please confirm the procedure. It will require a strong will."
 }
 
 function git(){
-  echo "Install git"
+  local git="git"
+  if ! [ $(is_installed git) ]; then 
+    manual 'git'
+  else
+    printf "Git is already installed...\n"
+  fi
 }
 
 function jdk() {
