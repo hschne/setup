@@ -34,7 +34,7 @@ function jdk() {
     printf "Java is already installed...\n"
     return 0
   fi
-  sudo yaourt -S --noconfirm jdk 
+  yaourt -S --noconfirm jdk 
 }
 
 function mvn() {
@@ -43,7 +43,7 @@ function mvn() {
     printf "Maven is already installed...\n"
       return 0
   fi
-  sudo yaourt -S --noconfirm maven
+  yaourt -S --noconfirm maven
 }
 
 function rbenv {
@@ -125,7 +125,8 @@ function manual() {
 # 
 function gclone() {
   local git="/usr/bin/git"
-  "${git}" clone $1 $2
+  # Run clone as original user, not as sudo
+  sudo -u "${SUDO_USER}" "${git}" clone $1 $2
 }
 
 main "$@"
