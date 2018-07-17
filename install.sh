@@ -2,13 +2,16 @@
 
 readonly TMP_DIR="/tmp/install"
 
-readonly UTIL="util.sh"
+USER_HOME=
 
 function main() {
-  if [ "$UID" -ne "0" ]; then
-      echo "You must be root to run $0."
-      exit 1
+  if [ "${UID}" -ne "0" ]; then
+    echo "You must be root to run $0."
+    exit 1
   fi
+
+  # Set original user home, see https://stackoverflow.com/a/7359006
+  USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
 
   git
   jdk
@@ -16,12 +19,12 @@ function main() {
   rbenv
   pyenv
   nvm
-  
+
 }
 
 function git(){
   local git="git"
-  if ! [ $(is_installed git) ]; then 
+  if ! is_installed git; then 
     manual "Git must be installed manually. Visit https://git-scm.com/download/linux for installation instructions."
   else
     printf "Git is already installed...\n"
@@ -29,43 +32,42 @@ function git(){
 }
 
 function jdk() {
-  echo "Install jdk"
-  if [ $(is_installed java) ]; then 
+  if is_installed java; then 
     printf "Java is already installed...\n"
-    return 0
+    return
   fi
-  yaourt -S --noconfirm jdk 
+  yaourt -S --noconfirm jdk
 }
 
 function mvn() {
-  echo "Install mvn"
-  if [ $(is_installed mvn) ]; then 
+  if is_installed mvn; then 
     printf "Maven is already installed...\n"
-      return 0
+    return 
   fi
   yaourt -S --noconfirm maven
 }
 
 function rbenv {
   echo "Install rbenv"
-  local rbenv_root="${HOME}/.rbenv"
+  local rbenv_root="${USER_HOME}/.rbenv"
+
   gclone "https://github.com/rbenv/rbenv.git" "${rbenv_root}"
   # Ruby-build is required to actually install ruby versions
-  mkdir -p "${rbenv_root}/plugins"
+  sudo -u "${SUDO_USER}" mkdir -p "${rbenv_root}/plugins"
   gclone "https://github.com/rbenv/ruby-build.git" "${rbenv_root}/plugins/ruby-build"
 }
 
 function pyenv() {
   echo "Install pyenv"
-  local pyenv_root="${HOME}/.pyenv"
+  local pyenv_root="${USER_HOME}/.pyenv"
   gclone "https://github.com/pyenv/pyenv.git" "${pyenv_root}"
 }
 
 function nvm() {
   echo "Install nvm"
-  local nvm_root="${HOME}/.nvm"
+  local nvm_root="${USER_HOME}/.nvm"
   gclone "https://github.com/creationix/nvm.git" "${nvm_root}"
- }
+}
 
 function zsh() {
   echo "Install zsh"
@@ -89,11 +91,11 @@ function cloud_station(){
 #
 #   is_installed "git"
 #
-# Returns 1 if the program is installed and 0 otherwise. 
+# Returns 0 if the program is installed and 1 otherwise. 
 function is_installed {
-  local return=1
-  type $1 >/dev/null 2>&1 || { local return=0; }
-  echo "${return}"
+  local result=0
+  type $1 >/dev/null 2>&1 || { local result=1; }
+  return $result
 }
 
 # Prompts the user to perform a manual step. 
@@ -126,7 +128,17 @@ function manual() {
 function gclone() {
   local git="/usr/bin/git"
   # Run clone as original user, not as sudo
-  sudo -u "${SUDO_USER}" "${git}" clone $1 $2
+  sudo -u "${SUDO_USER}" "${git}" clone --depth=1 $1 $2
+}
+
+# Just a test, might get back to this later
+function run_as() {
+  local user=$1
+  shift
+  echo "I am $user"
+su ${user} <<'EOF'
+  $@
+EOF
 }
 
 main "$@"
