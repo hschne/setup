@@ -13,8 +13,13 @@ function main() {
   # Set original user home, see https://stackoverflow.com/a/7359006
   USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
 
+  run_as $SUDO_USER echo $(whoami)
+  run_as $USER apt-get install git
+  run_as $USER ls /
+
+  exit 1;
   git
-  jdk
+  #jdk
   mvn
   rbenv
   pyenv
@@ -32,23 +37,14 @@ function git(){
 }
 
 function jdk() {
-  if is_installed java; then 
-    printf "Java is already installed...\n"
-    return
-  fi
-  yaourt -S --noconfirm jdk
+  sudo -u "${SUDO_USER}" yaourt -S --noconfirm jdk
 }
 
 function mvn() {
-  if is_installed mvn; then 
-    printf "Maven is already installed...\n"
-    return 
-  fi
-  yaourt -S --noconfirm maven
+  sudo -u "${SUDO_USER}" yaourt -S --noconfirm maven 
 }
 
 function rbenv {
-  echo "Install rbenv"
   local rbenv_root="${USER_HOME}/.rbenv"
 
   gclone "https://github.com/rbenv/rbenv.git" "${rbenv_root}"
@@ -58,19 +54,18 @@ function rbenv {
 }
 
 function pyenv() {
-  echo "Install pyenv"
   local pyenv_root="${USER_HOME}/.pyenv"
   gclone "https://github.com/pyenv/pyenv.git" "${pyenv_root}"
 }
 
 function nvm() {
-  echo "Install nvm"
   local nvm_root="${USER_HOME}/.nvm"
   gclone "https://github.com/creationix/nvm.git" "${nvm_root}"
 }
 
 function zsh() {
   echo "Install zsh"
+  yaourt -S --noconfirm zsh
 }
 
 function oh_my_zsh() {
@@ -128,17 +123,14 @@ function manual() {
 function gclone() {
   local git="/usr/bin/git"
   # Run clone as original user, not as sudo
+  # Also silence output
   sudo -u "${SUDO_USER}" "${git}" clone --depth=1 $1 $2
 }
 
-# Just a test, might get back to this later
 function run_as() {
   local user=$1
   shift
-  echo "I am $user"
-su ${user} <<'EOF'
-  $@
-EOF
+  sudo -u $user $@ 
 }
 
 main "$@"
