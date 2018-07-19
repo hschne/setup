@@ -5,52 +5,53 @@ readonly TMP_DIR="/tmp/install"
 USER_HOME=
 
 function main() {
+  echo $(rbenv install -l | highest_version)
+
+  exit 1
+
   if [ "${UID}" -ne "0" ]; then
     echo "You must be root to run $0."
     exit 1
   fi
 
+  echo $(rbenv install -l | highest_version)
+
+  exit 1
   # Set original user home, see https://stackoverflow.com/a/7359006
   USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
 
-  run_as $SUDO_USER echo $(whoami)
-  run_as $USER apt-get install git
-  run_as $USER ls /
+  install_packages 
 
-  exit 1;
-  git
-  #jdk
-  mvn
+  install_tools
+}
+
+function install_packages() {
+  sudo -u "${USER}" pacman -S --noconfirm --needed \
+    git \
+    zsh 
+
+  sudo -u "${SUDO_USER}" yaourt -S --noconfirm --needed \
+    jdk \
+    maven 
+}
+
+function install_tools() {
   rbenv
   pyenv
   nvm
-
-}
-
-function git(){
-  local git="git"
-  if ! is_installed git; then 
-    manual "Git must be installed manually. Visit https://git-scm.com/download/linux for installation instructions."
-  else
-    printf "Git is already installed...\n"
-  fi
-}
-
-function jdk() {
-  sudo -u "${SUDO_USER}" yaourt -S --noconfirm jdk
-}
-
-function mvn() {
-  sudo -u "${SUDO_USER}" yaourt -S --noconfirm maven 
+  oh_my_zsh
+  cloud_station
 }
 
 function rbenv {
   local rbenv_root="${USER_HOME}/.rbenv"
 
   gclone "https://github.com/rbenv/rbenv.git" "${rbenv_root}"
+
   # Ruby-build is required to actually install ruby versions
-  sudo -u "${SUDO_USER}" mkdir -p "${rbenv_root}/plugins"
+  run_as "${SUDO_USER}" mkdir -p "${rbenv_root}/plugins"
   gclone "https://github.com/rbenv/ruby-build.git" "${rbenv_root}/plugins/ruby-build"
+
 }
 
 function pyenv() {
@@ -63,13 +64,22 @@ function nvm() {
   gclone "https://github.com/creationix/nvm.git" "${nvm_root}"
 }
 
-function zsh() {
-  echo "Install zsh"
-  yaourt -S --noconfirm zsh
+function jenv() {
+  local jenv_root="${USER_HOME}/.jenv"
+  gclone "https://github.com/gcuisinier/jenv.git" "${jenv_root}"
 }
 
 function oh_my_zsh() {
-  echo "Install oh-my-zsh"
+  # Lets do this manually, because the install script does a bunch of stuff we don't need
+  local ohmyzsh_root="${USER_HOME}/.oh-my-zsh"
+  gclone "https://github.com/robbyrussell/oh-my-zsh.git" "${ohmyzsh_root}"
+
+  # Change shell to zsh
+  chsh -s "/bin/zsh" ${SUDO_USER}
+}
+
+function fzf() {
+  echo "Install fzf"
 }
 
 function cloud_station(){
@@ -123,14 +133,26 @@ function manual() {
 function gclone() {
   local git="/usr/bin/git"
   # Run clone as original user, not as sudo
-  # Also silence output
   sudo -u "${SUDO_USER}" "${git}" clone --depth=1 $1 $2
 }
 
+# Run the specified command as specified user
 function run_as() {
   local user=$1
   shift
   sudo -u $user $@ 
+}
+
+function highest_version() {
+  # Magic comes from here: https://stackoverflow.com/a/30183040/2553104
+  awk -F '.' '
+  /^[[:space:]]*[0-9]+\.[0-9]+\.[0-9]+[[:space:]]*$/ {
+  if ( ($1 * 100 + $2) * 100 + $3 > Max ) {
+    Max = ($1 * 100 + $2) * 100 + $3
+    Version=$0
+    }
+  }
+  END { print Version }'
 }
 
 main "$@"
