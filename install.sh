@@ -7,6 +7,8 @@ function main() {
   install_packages 
 
   install_tools
+
+  reboot
 }
 
 function install_packages() {
@@ -15,7 +17,9 @@ function install_packages() {
     gvim \
     jdk10-openjdk \
     zsh \
-    thefuck
+    fzf \
+    thefuck \
+    hub
 
   # Set shell for user, done here to avoid timeout problems for sudo 
   sudo chsh -s "/bin/zsh" ${USER}
@@ -46,7 +50,7 @@ function rbenv {
   local rbenv_bin="${rbenv_root}/bin/rbenv"
   # Get available version, pick the highest one, and then strip leading white space
   # Sed expression from here: https://stackoverflow.com/a/3232433
-  local version=$("${rbenv_bin}" install -l | highest_version | sed -e 's/^[[:space:]]*//') 
+  local version=$("${rbenv_bin}" install -l | highest_version) 
   "${rbenv_bin}" install "${version}"
 }
 
@@ -55,7 +59,7 @@ function pyenv() {
   gclone "https://github.com/pyenv/pyenv.git" "${pyenv_root}"
 
   local pyenv_bin="${pyenv_root}/bin/pyenv"
-  local version=$("${pyenv_bin}" install -l | highest_version | sed -e 's/^[[:space:]]*//')
+  local version=$("${pyenv_bin}" install -l | highest_version)
   "${pyenv_bin}" install "${version}"
 }
 
@@ -90,6 +94,8 @@ function oh_my_zsh() {
 function fzf() {
   local fzf_root="${HOME}/.fzf"
   gclone "https://github.com/junegunn/fzf.git" "${fzf_root}"
+
+  "${fzf_root}/install" --all 
 }
 
 function homeshick(){
@@ -107,8 +113,14 @@ function vim_() {
   vim +PluginInstall +qall
 }
 
+
+# Reboot after prompting the user for it
+# Taken from https://unix.stackexchange.com/a/426189
+function reboot() {
+  echo "Setup completed. Reboot? (y/n)" && read x && [[ "$x" == "y" ]] && /sbin/reboot; 
+}
+
 # Check if a certain program is installed.  
-# 
 # Taken from https://gist.github.com/JamieMason/4761049
 #
 # $1 - Command to be checked.
@@ -125,6 +137,7 @@ function is_installed {
 }
 
 # Prompts the user to perform a manual step. 
+# Taken from https://unix.stackexchange.com/a/293941
 #
 # Arguments:
 #
@@ -140,7 +153,8 @@ function manual() {
   read -n 1 -s -r -p "Press any key to continue..."
 }
 
-# A wrapper around git clone. Does not rely on the path.
+# A wrapper around git clone. Does not rely on the path and clones with shallow 
+# in order to speed up process. 
 #
 # Arguments:
 #
@@ -156,13 +170,20 @@ function gclone() {
   "${git}" clone --depth 1 $1 $2
 }
 
-# Run the specified command as specified user
-function run_as() {
-  local user=$1
-  shift
-  sudo -u $user $@ 
-}
-
+# Returns the highest version from a list of version strings,
+# stripped of leading white space. 
+# Magic taken from: 
+#   https://stackoverflow.com/a/30183040/2553104
+#   https://stackoverflow.com/a/3232433
+# 
+# Arguments: 
+# 
+# $@ - A list of versions of the form x.x.x
+#
+# Examples
+#
+#    echo "1.2.3 3.4.2 5.0.1" | highest_version
+#
 function highest_version() {
   # Magic comes from here: https://stackoverflow.com/a/30183040/2553104
   awk -F '.' '
@@ -172,7 +193,8 @@ function highest_version() {
     Version=$0
   }
 }
-END { print Version }'
+END { print Version }' | sed -e 's/^[[:space:]]*//'
 }
 
+# Entrypoint
 main "$@"

@@ -1,10 +1,17 @@
+<p align="center">
+  <img src="./logo.png"/>
+</p>
+
 # Daham
 
-A place like home.
+A place like home. Fully automated Antergos setup script. Install all the packages, and all the CLI tools. 
 
-## TODO:
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/hschne/daham/master/install.sh)"
 
-- Colors, colors everywhere
-- Hide output, instead redirect to log
-- See above, give conclusive feedback of whats going on, notify of any failures
-  - Including execution time!  
+Have a look at the [script](install.sh) for more info!
+
+## Ideas for Improvements
+
+- Colors, colors everywhere :rainbow:
+- Hide output, instead redirect to log. Its a bit messy at the moment
+- Provide infos about installation progress, with checkmarks and stuff. And the total time it took. And a summary! 
