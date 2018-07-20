@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
 
-readonly TMP_DIR="/tmp/install"
-
-USER_HOME=
-
 function main() {
-  if [ "${UID}" -ne "0" ]; then
-    echo "You must be root to run $0."
-    exit 1
-  fi
-
-  # Set original user home, see https://stackoverflow.com/a/7359006
-  USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
+  # Ask for sudo in the beginning, so that's done with
+  sudo echo ""
 
   install_packages 
 
@@ -19,81 +10,101 @@ function main() {
 }
 
 function install_packages() {
-  sudo -u "${USER}" pacman -S --noconfirm --needed \
+  sudo pacman -S --noconfirm --needed \
     git \
     gvim \
-    zsh
+    jdk10-openjdk \
+    zsh \
+    thefuck
 
-  sudo -u "${SUDO_USER}" yaourt -S --noconfirm --needed \
-   # jdk \
+  # Set shell for user, done here to avoid timeout problems for sudo 
+  sudo chsh -s "/bin/zsh" ${USER}
+
+  yaourt -S --noconfirm --needed \
     maven 
 }
 
 function install_tools() {
-  #rbenv
-  #pyenv
-  install_nvm
+  rbenv
+  pyenv
+  nvm_
   jenv
   fzf
   oh_my_zsh
+  homeshick
+  vim_
 }
 
 function rbenv {
-  local rbenv_root="${USER_HOME}/.rbenv"
-
+  local rbenv_root="${HOME}/.rbenv"
   gclone "https://github.com/rbenv/rbenv.git" "${rbenv_root}"
 
   # Ruby-build is required to actually install ruby versions
-  run_as "${SUDO_USER}" mkdir -p "${rbenv_root}/plugins"
+  mkdir -p "${rbenv_root}/plugins"
   gclone "https://github.com/rbenv/ruby-build.git" "${rbenv_root}/plugins/ruby-build"
 
   local rbenv_bin="${rbenv_root}/bin/rbenv"
-  local result=$(run_as ${SUDO_USER} "${rbenv_bin}" install -l) 
-  local version=$(echo "${result}" | highest_version)
-  run_as "${SUDO_USER}" "${rbenv_bin}" install "${version}"
+  # Get available version, pick the highest one, and then strip leading white space
+  # Sed expression from here: https://stackoverflow.com/a/3232433
+  local version=$("${rbenv_bin}" install -l | highest_version | sed -e 's/^[[:space:]]*//') 
+  "${rbenv_bin}" install "${version}"
 }
 
 function pyenv() {
-  local pyenv_root="${USER_HOME}/.pyenv"
+  local pyenv_root="${HOME}/.pyenv"
   gclone "https://github.com/pyenv/pyenv.git" "${pyenv_root}"
 
   local pyenv_bin="${pyenv_root}/bin/pyenv"
-  local result=$(run_as ${SUDO_USER} "${pyenv_bin}" install -l) 
-  local version=$(echo "${result}" | highest_version)
-  run_as "${SUDO_USER}" "${pyenv_bin}" install "${version}"
+  local version=$("${pyenv_bin}" install -l | highest_version | sed -e 's/^[[:space:]]*//')
+  "${pyenv_bin}" install "${version}"
 }
 
-function install_nvm() {
-  local nvm_root="${USER_HOME}/.nvm"
+function nvm_() {
+  local nvm_root="${HOME}/.nvm"
   gclone "https://github.com/creationix/nvm.git" "${nvm_root}"
 
   # Make nvm immediatly accessible in shell
-  export NVM_DIR="${USER_HOME}/.nvm"
-  sudo su ${SUDO_USER} <<EOF
-    . ${NVM_DIR}/nvm.sh
-   nvm install node
-EOF
-
+  export NVM_DIR="${HOME}/.nvm"
+  source ${NVM_DIR}/nvm.sh
+  nvm install node
 }
 
 function jenv() {
-  local jenv_root="${USER_HOME}/.jenv"
+  local jenv_root="${HOME}/.jenv"
   gclone "https://github.com/gcuisinier/jenv.git" "${jenv_root}"
+
+  local jenv_bin="${jenv_root}/bin/jenv"
+  $jenv_bin init -
+  ${jenv_bin} add --skip-existing /usr/lib/jvm/java-10-openjdk
 }
 
 function oh_my_zsh() {
   # Lets do this manually, because the install script does a bunch of stuff we don't need
-  local ohmyzsh_root="${USER_HOME}/.oh-my-zsh"
+  local ohmyzsh_root="${HOME}/.oh-my-zsh"
   gclone "https://github.com/robbyrussell/oh-my-zsh.git" "${ohmyzsh_root}"
 
-  # Change shell to zsh
-  chsh -s "/bin/zsh" ${SUDO_USER}
+  local themes_root="${ohmyzsh_root}/custom/themes/"
+  wget https://raw.githubusercontent.com/caiogondim/bullet-train.zsh/master/bullet-train.zsh-theme -P "${themes_root}"
 }
 
 function fzf() {
-  echo "Install fzf"
-  local fzf_root="${USER_HOME}/.fzf"
+  local fzf_root="${HOME}/.fzf"
   gclone "https://github.com/junegunn/fzf.git" "${fzf_root}"
+}
+
+function homeshick(){
+  local homeshick_root="${HOME}/.homesick/repos/homeshick"
+  gclone git://github.com/andsens/homeshick.git "${homeshick_root}"
+
+  homeshick_bin="${homeshick_root}/bin/homeshick" 
+  ${homeshick_bin} clone --batch hschne/dotfiles
+  ${homeshick_bin} link --force
+}
+
+function vim_() {
+  gclone "https://github.com/VundleVim/Vundle.vim.git" ~/.vim/bundle/Vundle.vim
+
+  vim +PluginInstall +qall
 }
 
 # Check if a certain program is installed.  
@@ -142,8 +153,7 @@ function manual() {
 # 
 function gclone() {
   local git="/usr/bin/git"
-  # Run clone as original user, not as sudo
-  sudo -u "${SUDO_USER}" "${git}" clone --depth=1 $1 $2
+  "${git}" clone --depth 1 $1 $2
 }
 
 # Run the specified command as specified user
