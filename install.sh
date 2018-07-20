@@ -5,18 +5,11 @@ readonly TMP_DIR="/tmp/install"
 USER_HOME=
 
 function main() {
-  echo $(rbenv install -l | highest_version)
-
-  exit 1
-
   if [ "${UID}" -ne "0" ]; then
     echo "You must be root to run $0."
     exit 1
   fi
 
-  echo $(rbenv install -l | highest_version)
-
-  exit 1
   # Set original user home, see https://stackoverflow.com/a/7359006
   USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
 
@@ -28,19 +21,21 @@ function main() {
 function install_packages() {
   sudo -u "${USER}" pacman -S --noconfirm --needed \
     git \
-    zsh 
+    gvim \
+    zsh
 
   sudo -u "${SUDO_USER}" yaourt -S --noconfirm --needed \
-    jdk \
+   # jdk \
     maven 
 }
 
 function install_tools() {
-  rbenv
-  pyenv
-  nvm
+  #rbenv
+  #pyenv
+  install_nvm
+  jenv
+  fzf
   oh_my_zsh
-  cloud_station
 }
 
 function rbenv {
@@ -52,16 +47,33 @@ function rbenv {
   run_as "${SUDO_USER}" mkdir -p "${rbenv_root}/plugins"
   gclone "https://github.com/rbenv/ruby-build.git" "${rbenv_root}/plugins/ruby-build"
 
+  local rbenv_bin="${rbenv_root}/bin/rbenv"
+  local result=$(run_as ${SUDO_USER} "${rbenv_bin}" install -l) 
+  local version=$(echo "${result}" | highest_version)
+  run_as "${SUDO_USER}" "${rbenv_bin}" install "${version}"
 }
 
 function pyenv() {
   local pyenv_root="${USER_HOME}/.pyenv"
   gclone "https://github.com/pyenv/pyenv.git" "${pyenv_root}"
+
+  local pyenv_bin="${pyenv_root}/bin/pyenv"
+  local result=$(run_as ${SUDO_USER} "${pyenv_bin}" install -l) 
+  local version=$(echo "${result}" | highest_version)
+  run_as "${SUDO_USER}" "${pyenv_bin}" install "${version}"
 }
 
-function nvm() {
+function install_nvm() {
   local nvm_root="${USER_HOME}/.nvm"
   gclone "https://github.com/creationix/nvm.git" "${nvm_root}"
+
+  # Make nvm immediatly accessible in shell
+  export NVM_DIR="${USER_HOME}/.nvm"
+  sudo su ${SUDO_USER} <<EOF
+    . ${NVM_DIR}/nvm.sh
+   nvm install node
+EOF
+
 }
 
 function jenv() {
@@ -80,10 +92,8 @@ function oh_my_zsh() {
 
 function fzf() {
   echo "Install fzf"
-}
-
-function cloud_station(){
-  echo "Install cloud station"
+  local fzf_root="${USER_HOME}/.fzf"
+  gclone "https://github.com/junegunn/fzf.git" "${fzf_root}"
 }
 
 # Check if a certain program is installed.  
@@ -150,9 +160,9 @@ function highest_version() {
   if ( ($1 * 100 + $2) * 100 + $3 > Max ) {
     Max = ($1 * 100 + $2) * 100 + $3
     Version=$0
-    }
   }
-  END { print Version }'
+}
+END { print Version }'
 }
 
 main "$@"
