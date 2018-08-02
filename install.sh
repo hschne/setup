@@ -12,6 +12,8 @@ function main() {
 }
 
 function install_packages() {
+  sudo pacman -Syy
+
   sudo pacman -S --noconfirm --needed \
     git \
     gvim \
@@ -34,7 +36,7 @@ function install_tools() {
   nvm_
   jenv
   fzf
-  oh_my_zsh
+  antigen
   homeshick
   vim_
 }
@@ -82,13 +84,9 @@ function jenv() {
   ${jenv_bin} add --skip-existing /usr/lib/jvm/java-10-openjdk
 }
 
-function oh_my_zsh() {
-  # Lets do this manually, because the install script does a bunch of stuff we don't need
-  local ohmyzsh_root="${HOME}/.oh-my-zsh"
-  gclone "https://github.com/robbyrussell/oh-my-zsh.git" "${ohmyzsh_root}"
-
-  local themes_root="${ohmyzsh_root}/custom/themes/"
-  wget https://raw.githubusercontent.com/caiogondim/bullet-train.zsh/master/bullet-train.zsh-theme -P "${themes_root}"
+function antigen() {
+  # Nicely enough, this is all thats required
+  curl -L git.io/antigen > "${HOME}/antigen.zsh"
 }
 
 function fzf() {
@@ -102,8 +100,11 @@ function homeshick(){
   local homeshick_root="${HOME}/.homesick/repos/homeshick"
   gclone git://github.com/andsens/homeshick.git "${homeshick_root}"
 
-  homeshick_bin="${homeshick_root}/bin/homeshick" 
+  homeshick_bin="${homeshick_root}/bin/homeshick"
+  # Clone dotfiles
   ${homeshick_bin} clone --batch hschne/dotfiles
+  # Clone scripts
+  ${homeshick_bin} clone --batch hschne/scripts
   ${homeshick_bin} link --force
 }
 
