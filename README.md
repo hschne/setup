@@ -2,13 +2,13 @@
   <img src="./logo.png"/>
 </p>
 
-# Daham
+# setup
 
-A place like home. Fully automated Antergos setup script. Install all the packages, and all the CLI tools. 
+Setup a place like home. Fully automated Antergos setup script. Install all the packages, and all the CLI tools. 
 
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/hschne/daham/master/install.sh)"
 
-Have a look at the [script](install.sh) for more info!
+Have a look at the [script](install.sh) for more info.
 
 ## Ideas for Improvements
 
