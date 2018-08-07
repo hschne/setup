@@ -18,19 +18,24 @@ function install_packages() {
     git \
     gvim \
     jdk10-openjdk \
+    maven \
     zsh \
     fzf \
     thefuck \
-    hub
+    hub \
+    diff-so-fancy \
+    chrome-gnome-shell
 
-  # Set shell for user, done here to avoid timeout problems for sudo 
+  # Set shell for user, done here to avoid timeout problems for sudot 
   sudo chsh -s "/bin/zsh" ${USER}
 
   yaourt -S --noconfirm --needed \
-    maven 
+    synology-cloud-station-drive
 }
 
 function install_tools() {
+  appindicator
+  jetbrains_toolbox
   rbenv
   pyenv
   nvm_
@@ -39,6 +44,7 @@ function install_tools() {
   antigen
   homeshick
   vim_
+  nord
 }
 
 function rbenv {
@@ -50,8 +56,6 @@ function rbenv {
   gclone "https://github.com/rbenv/ruby-build.git" "${rbenv_root}/plugins/ruby-build"
 
   local rbenv_bin="${rbenv_root}/bin/rbenv"
-  # Get available version, pick the highest one, and then strip leading white space
-  # Sed expression from here: https://stackoverflow.com/a/3232433
   local version=$("${rbenv_bin}" install -l | highest_version) 
   "${rbenv_bin}" install "${version}"
 }
@@ -114,44 +118,30 @@ function vim_() {
   vim +PluginInstall +qall
 }
 
+function nord() {
+  local nord_url="https://raw.githubusercontent.com/arcticicestudio/nord-gnome-terminal/develop/src/nord.sh"
+  wget -O - "${nord_url}" | bash
+}
+
+function appindicator() {
+  # Use the repository clone for headless installation, see GitHub for more info: https://github.com/Ubuntu/gnome-shell-extension-appindicator
+  local extension_home="${HOME}/.local/share/gnome-shell/extensions"
+  gclone https://github.com/ubuntu/gnome-shell-extension-appindicator.git \
+    "${extension_home}/appindicatorsupport@rgcjonas.gmail.com"
+
+  gnome-shell-extension-tool -e appindicatorsupport@rgcjonas.gmail.com
+}
+
+function jetbrains_toolbox() {
+  wget -O - "https://raw.githubusercontent.com/nagygergo/jetbrains-toolbox-install/master/jetbrains-toolbox.sh" | bash
+}
+
+
 
 # Reboot after prompting the user for it
 # Taken from https://unix.stackexchange.com/a/426189
 function reboot() {
   echo "Setup completed. Reboot? (y/n)" && read x && [[ "$x" == "y" ]] && /sbin/reboot; 
-}
-
-# Check if a certain program is installed.  
-# Taken from https://gist.github.com/JamieMason/4761049
-#
-# $1 - Command to be checked.
-#
-# Examples
-#
-#   is_installed "git"
-#
-# Returns 0 if the program is installed and 1 otherwise. 
-function is_installed {
-  local result=0
-  type $1 >/dev/null 2>&1 || { local result=1; }
-  return $result
-}
-
-# Prompts the user to perform a manual step. 
-# Taken from https://unix.stackexchange.com/a/293941
-#
-# Arguments:
-#
-# $1 - A message to display
-#
-# Examples
-#
-#   manual "Please install zsh manually"
-# 
-function manual() {
-  local message=$1
-  echo ${message}
-  read -n 1 -s -r -p "Press any key to continue..."
 }
 
 # A wrapper around git clone. Does not rely on the path and clones with shallow 
