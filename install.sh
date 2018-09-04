@@ -106,9 +106,9 @@ function homeshick(){
 
   homeshick_bin="${homeshick_root}/bin/homeshick"
   # Clone dotfiles
-  ${homeshick_bin} clone --batch hschne/dotfiles
+  ${homeshick_bin} clone --batch glumpat/dotfiles
   # Clone scripts
-  ${homeshick_bin} clone --batch hschne/scripts
+  ${homeshick_bin} clone --batch glumpat/scripts
   ${homeshick_bin} link --force
 }
 
