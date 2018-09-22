@@ -20,7 +20,7 @@ function install_packages() {
     jdk10-openjdk \
     maven \
     zsh \
-    fzf \
+    bat \
     thefuck \
     hub \
     diff-so-fancy \
@@ -40,8 +40,7 @@ function install_tools() {
   pyenv
   nvm_
   jenv
-  fzf
-  antigen
+  zplug
   homeshick
   vim_
   nord
@@ -88,16 +87,8 @@ function jenv() {
   ${jenv_bin} add --skip-existing /usr/lib/jvm/java-10-openjdk
 }
 
-function antigen() {
-  # Nicely enough, this is all thats required
-  curl -L git.io/antigen > "${HOME}/antigen.zsh"
-}
-
-function fzf() {
-  local fzf_root="${HOME}/.fzf"
-  gclone "https://github.com/junegunn/fzf.git" "${fzf_root}"
-
-  "${fzf_root}/install" --all 
+function zplug() {
+  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 }
 
 function homeshick(){
