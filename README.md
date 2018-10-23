@@ -6,7 +6,7 @@ Setup a place like home. Fully automated Antergos setup script. Install all the 
 
 Have a look at the [script](install.sh) for more info.
 
-Improvements & Updates:
+## Improvements & Updates:
 
 - [Restrict Alt Tab to Workspace](https://askubuntu.com/a/759740) 
 - Backup & Restore Keybindings
