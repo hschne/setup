@@ -12,5 +12,6 @@ Have a look at the [script](install.sh) for more info.
 - Backup & Restore Keybindings
 - SSH clone for homeshick
 - Better lockscreen thing
+- All the damn fonts
 - Install: 
     - Rambox
