@@ -11,7 +11,7 @@ Have a look at the [script](install.sh) for more info.
 - [Restrict Alt Tab to Workspace](https://askubuntu.com/a/759740) 
 - Backup & Restore Keybindings
 - SSH clone for homeshick
-- Better lockscreen thing
-- All the damn fonts
+- Better lockscreen: GDM, see [Reddit](https://www.reddit.com/r/antergos/comments/7ghz7v/installed_antergos_gnome_whats_with_this_terrible/)
+- Google Noto Fonts (for them :smile:)
 - Install: 
     - Rambox
