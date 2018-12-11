@@ -12,6 +12,10 @@ Have a look at the [script](install.sh) for more info.
 - Backup & Restore Keybindings
 - SSH clone for homeshick
 - Better lockscreen: GDM, see [Reddit](https://www.reddit.com/r/antergos/comments/7ghz7v/installed_antergos_gnome_whats_with_this_terrible/)
-- Google Noto Fonts (for them :smile:)
+- Google Noto Fonts (for them :smile:) / Also [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
 - Install: 
     - Rambox
+    - Ngrok
+ - Remove: 
+    - Jenv (don't really need that anymore)
+    
