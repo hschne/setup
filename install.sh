@@ -1,36 +1,149 @@
 #!/usr/bin/env bash
 
-function main() {
-  # Ask for sudo in the beginning, so that's done with
-  sudo echo ""
+declare -g ERROR=0
+declare -g DRY_RUN=0
 
-  install_packages 
+declare spinner_pid
+
+declare esc_seq="\e["
+declare col_reset="${esc_seq}0m"
+declare col_red="${esc_seq}38;5;9m"
+declare col_green="${esc_seq}32m"
+declare col_yellow="${esc_seq}33m"
+declare col_blue="${esc_seq}34m"
+
+function main() {
+  print_banner
+
+  echo "test"
+  # Ask for sudo in the beginning, so that's done with
+  sudo_keep_alive
+
+  pacman_packages=( 
+    bat 
+    chrome-gnome-shell
+    diff-so-fancy
+    gdm
+    git
+    gvim
+    hub 
+    jdk-11-openjdk
+    maven 
+    thefuck
+    zsh 
+  )
+
+  install_packages "${pacman_packages[@]}"
+  exit 0
+
+  # sudo pacman -Syy && sudo pacman -S --noconfirm --needed "${1[@]}"
+
+
+  community_packages=(
+    synology-cloud-station-drive
+    rambox-bin
+    ngrok
+    nerd-fonts-complete
+  )
 
   install_tools
 
   reboot
 }
 
-function install_packages() {
-  sudo pacman -Syy
+print_banner() {
+  clear 
+cat << "EOF"
 
-  sudo pacman -S --noconfirm --needed \
-    git \
-    gvim \
-    jdk10-openjdk \
-    maven \
-    zsh \
-    bat \
-    thefuck \
-    hub \
-    diff-so-fancy \
-    chrome-gnome-shell
++============================================================================+
+|    _____ _                             _      _____      _                 |
+|   / ____| |                           | |    / ____|    | |                |
+|  | |  __| |_   _ _ __ ___  _ __   __ _| |_  | (___   ___| |_ _   _ _ __    |
+|  | | |_ | | | | | '_ ` _ \| '_ \ / _` | __|  \___ \ / _ \ __| | | | '_ \   |
+|  | |__| | | |_| | | | | | | |_) | (_| | |_   ____) |  __/ |_| |_| | |_) |  |
+|   \_____|_|\__,_|_| |_| |_| .__/ \__,_|\__| |_____/ \___|\__|\__,_| .__/   |
+|                           | |                                     | |      |
+|                           |_|                                     |_|      |
+|                                                                            |
++============================================================================+
 
-  # Set shell for user, done here to avoid timeout problems for sudot 
-  sudo chsh -s "/bin/zsh" ${USER}
+EOF
+}
 
-  yaourt -S --noconfirm --needed \
-    synology-cloud-station-drive
+print_info() {
+  local time
+  time=$(date +"%Y-%m-%d %H:%M:%S")
+  printf "${col_yellow}[%-5s]${col_reset} ${col_blue}%s${col_reset} - %s\n" "INFO" "$time" "$1"
+}
+
+print_error() {
+  local time
+  time=$(date +"%Y-%m-%d %H:%M:%S")
+  printf "${col_red}[%-5s]${col_reset} ${col_blue}%s${col_reset} - %s\n" "ERROR" "$time" "$@"
+}
+
+print_empty() {
+  echo -e "\n"
+}
+
+configure_gdm(){
+  sudo systemctl disable lightdm && sudo systemctl enable gdm.
+}
+
+
+install_packages() {
+  local -a packages=( "$@" )
+  local packages_string 
+  packages_string=$(printf "%s, " "${packages[@]}" | cut -d "," -f 1-${#packages[@]})
+  print_info "Packages to install: $packages_string"
+
+  run_with_spinner "Installing packages..." "sleep 4"
+
+  # Set shell for user, done here to avoid timeout problems for sudo 
+  # sudo chsh -s "/bin/zsh" "${USER}"
+
+  # yaourt -S --noconfirm --needed \
+  #   synology-cloud-station-drive
+}
+
+run_with_spinner() {
+  local message=$1
+  local command="$2"
+
+  time=$(date +"%Y-%m-%d %H:%M:%S")
+  # Like print_info, but without the trailing newline
+  printf "${col_yellow}[%-5s]${col_reset} ${col_blue}%s${col_reset} - %s" "INFO" "$time" "$message"
+  start_spinner
+  $command
+  result=$?
+
+  stop_spinner 
+  [[ $result -eq 0 ]] && printf " ${col_green}Done${col_reset}\n" || printf " ${col_red}Error${col_reset}\n"
+}
+
+spinner() {
+  local spinner="/|\\-/|\\-"
+  while :
+  do
+    for i in $(seq 0 7)
+    do
+      printf "${spinner:$i:1}"
+      printf "\010"
+      sleep .3
+    done
+  done
+}
+
+start_spinner() {
+  spinner &
+  spinner_pid=$!
+}
+
+stop_spinner() {
+  [[ -z "$spinner_pid" ]] && return 0
+
+  kill -9 "$spinner_pid" > /dev/null 
+  unset spinner_pid
 }
 
 function install_tools() {
@@ -39,20 +152,23 @@ function install_tools() {
   rbenv
   pyenv
   nvm_
-  jenv
   zplug
   homeshick
   vim_
   nord
 }
 
+generate_ssh_key() {
+  cat "/dev/zero" | ssh-keygen -b 4096 -q -N "" -C "$1"
+}
+
 function rbenv {
   local rbenv_root="${HOME}/.rbenv"
-  gclone "https://github.com/rbenv/rbenv.git" "${rbenv_root}"
+  gclone "rbenv/rbenv" "${rbenv_root}" 
 
   # Ruby-build is required to actually install ruby versions
   mkdir -p "${rbenv_root}/plugins"
-  gclone "https://github.com/rbenv/ruby-build.git" "${rbenv_root}/plugins/ruby-build"
+  gclone "rbenv/ruby-build" "${rbenv_root}/plugins/ruby-build"
 
   local rbenv_bin="${rbenv_root}/bin/rbenv"
   local version=$("${rbenv_bin}" install -l | highest_version) 
@@ -117,7 +233,7 @@ function nord() {
 function appindicator() {
   # Use the repository clone for headless installation, see GitHub for more info: https://github.com/Ubuntu/gnome-shell-extension-appindicator
   local extension_home="${HOME}/.local/share/gnome-shell/extensions"
-  gclone https://github.com/ubuntu/gnome-shell-extension-appindicator.git \
+  gclone ubuntu/gnome-shell-extension-appindicator \
     "${extension_home}/appindicatorsupport@rgcjonas.gmail.com"
 
   gnome-shell-extension-tool -e appindicatorsupport@rgcjonas.gmail.com
@@ -126,7 +242,12 @@ function appindicator() {
 function jetbrains_toolbox() {
   wget -O - "https://raw.githubusercontent.com/nagygergo/jetbrains-toolbox-install/master/jetbrains-toolbox.sh" | bash
 }
-
+sudo_keep_alive() {
+  sudo -p "Enter your password:" -v
+  # Keep-alive: update existing sudo time stamp until the script has finished
+  # See here: https://gist.github.com/cowboy/3118588
+  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+}
 
 
 # Reboot after prompting the user for it
@@ -149,7 +270,11 @@ function reboot() {
 # 
 function gclone() {
   local git="/usr/bin/git"
-  "${git}" clone --depth 1 $1 $2
+  local source="https://github.com/$1.git"
+  local destination="$2"
+  [[ -z $destination ]] &&  destination="$HOME"
+
+  "${git}" clone --depth 1 "$source" "$destination"
 }
 
 # Returns the highest version from a list of version strings,
@@ -177,6 +302,22 @@ function highest_version() {
 }
 END { print Version }' | sed -e 's/^[[:space:]]*//'
 }
+
+handle_exit() {
+  stop_spinner
+  echo ""
+  print_error "Installation aborted by user" 
+  exit 0
+}
+
+handle_error() {
+  stop_spinner
+  print_error "ERROR"
+  exit 1
+}
+
+trap 'handle_exit $?' 2
+trap 'handle_error $?' ERR
 
 # Entrypoint
 main "$@"
