@@ -1,22 +1,15 @@
 #!/usr/bin/env bash
 
+source "lib/ui.sh"
+
 declare -g ERROR=0
 declare -g DRY_RUN=0
-
-declare spinner_pid
-
-declare esc_seq="\e["
-declare col_reset="${esc_seq}0m"
-declare col_red="${esc_seq}38;5;9m"
-declare col_green="${esc_seq}32m"
-declare col_yellow="${esc_seq}33m"
-declare col_blue="${esc_seq}34m"
+declare -g DEBUG=1
 
 function main() {
-  print_banner
-
-  echo "test"
+  ui::print_banner
   # Ask for sudo in the beginning, so that's done with
+  
   sudo_keep_alive
 
   pacman_packages=( 
@@ -32,9 +25,11 @@ function main() {
     thefuck
     zsh 
   )
+  
+  # Set shell for user, done here to avoid timeout problems for sudo 
+  # sudo chsh -s "/bin/zsh" "${USER}"
 
   install_packages "${pacman_packages[@]}"
-  exit 0
 
   # sudo pacman -Syy && sudo pacman -S --noconfirm --needed "${1[@]}"
 
@@ -46,48 +41,27 @@ function main() {
     nerd-fonts-complete
   )
 
+  install_community_packages "${community_packages[@]}"
+
+  exit 0
+  
   install_tools
 
   reboot
+
+  print_summary
 }
 
-print_banner() {
-  clear 
-cat << "EOF"
-
-+============================================================================+
-|    _____ _                             _      _____      _                 |
-|   / ____| |                           | |    / ____|    | |                |
-|  | |  __| |_   _ _ __ ___  _ __   __ _| |_  | (___   ___| |_ _   _ _ __    |
-|  | | |_ | | | | | '_ ` _ \| '_ \ / _` | __|  \___ \ / _ \ __| | | | '_ \   |
-|  | |__| | | |_| | | | | | | |_) | (_| | |_   ____) |  __/ |_| |_| | |_) |  |
-|   \_____|_|\__,_|_| |_| |_| .__/ \__,_|\__| |_____/ \___|\__|\__,_| .__/   |
-|                           | |                                     | |      |
-|                           |_|                                     |_|      |
-|                                                                            |
-+============================================================================+
-
-EOF
-}
-
-print_info() {
-  local time
-  time=$(date +"%Y-%m-%d %H:%M:%S")
-  printf "${col_yellow}[%-5s]${col_reset} ${col_blue}%s${col_reset} - %s\n" "INFO" "$time" "$1"
-}
-
-print_error() {
-  local time
-  time=$(date +"%Y-%m-%d %H:%M:%S")
-  printf "${col_red}[%-5s]${col_reset} ${col_blue}%s${col_reset} - %s\n" "ERROR" "$time" "$@"
-}
-
-print_empty() {
-  echo -e "\n"
+print_summary() {
+  if [[ $ERROR -ne 0 ]]; then 
+    echo "ERrors happened, plz look at logz"
+  else 
+    echo "ALL is ok"
+  fi
 }
 
 configure_gdm(){
-  sudo systemctl disable lightdm && sudo systemctl enable gdm.
+  sudo systemctl disable lightdm && sudo systemctl enable gdm
 }
 
 
@@ -95,55 +69,24 @@ install_packages() {
   local -a packages=( "$@" )
   local packages_string 
   packages_string=$(printf "%s, " "${packages[@]}" | cut -d "," -f 1-${#packages[@]})
-  print_info "Packages to install: $packages_string"
+  ui::print_info "Packages to install: $packages_string \n"
 
-  run_with_spinner "Installing packages..." "sleep 4"
-
-  # Set shell for user, done here to avoid timeout problems for sudo 
-  # sudo chsh -s "/bin/zsh" "${USER}"
+  ui::run_with_spinner "Installing packages..." \
+    "command::execute sudo pacman -S --noconfirm ${packages[*]}"
 
   # yaourt -S --noconfirm --needed \
   #   synology-cloud-station-drive
 }
 
-run_with_spinner() {
-  local message=$1
-  local command="$2"
+install_community_packages() {
+  local -a packages=( "$@" )
+  local packages_string 
+  packages_string=$(printf "%s, " "${packages[@]}" | cut -d "," -f 1-${#packages[@]})
+  ui::print_info "Community packages to install: $packages_string \n"
 
-  time=$(date +"%Y-%m-%d %H:%M:%S")
-  # Like print_info, but without the trailing newline
-  printf "${col_yellow}[%-5s]${col_reset} ${col_blue}%s${col_reset} - %s" "INFO" "$time" "$message"
-  start_spinner
-  $command
-  result=$?
+  ui::run_with_spinner "Installing community packages..." \
+    "command::execute yaourt -S --noconfirm --needed ${packages[*]}"
 
-  stop_spinner 
-  [[ $result -eq 0 ]] && printf " ${col_green}Done${col_reset}\n" || printf " ${col_red}Error${col_reset}\n"
-}
-
-spinner() {
-  local spinner="/|\\-/|\\-"
-  while :
-  do
-    for i in $(seq 0 7)
-    do
-      printf "${spinner:$i:1}"
-      printf "\010"
-      sleep .3
-    done
-  done
-}
-
-start_spinner() {
-  spinner &
-  spinner_pid=$!
-}
-
-stop_spinner() {
-  [[ -z "$spinner_pid" ]] && return 0
-
-  kill -9 "$spinner_pid" > /dev/null 
-  unset spinner_pid
 }
 
 function install_tools() {
@@ -156,6 +99,22 @@ function install_tools() {
   homeshick
   vim_
   nord
+}
+
+command::execute() {
+  if [[ $DRY_RUN -eq 1 ]]; then 
+    [[ $DEBUG -eq 0 ]] && return 0
+    ui::print_debug "Dry running '$*' \n"; return 0
+  fi 
+
+  if [[ $DEBUG -ne 1 ]]; then 
+    "$@" >> log.txt
+  else 
+    "$@"
+  fi
+  local result=$?
+  [[ $result -ne 0 ]] && ERROR=1
+  return $result
 }
 
 generate_ssh_key() {
@@ -190,7 +149,7 @@ function nvm_() {
 
   # Make nvm immediatly accessible in shell
   export NVM_DIR="${HOME}/.nvm"
-  source ${NVM_DIR}/nvm.sh
+  source "${NVM_DIR}/nvm.sh"
   nvm install node
 }
 
@@ -243,7 +202,8 @@ function jetbrains_toolbox() {
   wget -O - "https://raw.githubusercontent.com/nagygergo/jetbrains-toolbox-install/master/jetbrains-toolbox.sh" | bash
 }
 sudo_keep_alive() {
-  sudo -p "Enter your password:" -v
+  if ! sudo -n true >/dev/null 2>&1; then { ui::print_prompt "Please enter your password: "; sudo -p "" -v; ui::break; }; fi
+
   # Keep-alive: update existing sudo time stamp until the script has finished
   # See here: https://gist.github.com/cowboy/3118588
   while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
@@ -304,15 +264,15 @@ END { print Version }' | sed -e 's/^[[:space:]]*//'
 }
 
 handle_exit() {
-  stop_spinner
-  echo ""
-  print_error "Installation aborted by user" 
+  ui::stop_spinner
+  ui::break
+  ui::print_error "Installation aborted by user\n" 
   exit 0
 }
 
 handle_error() {
-  stop_spinner
-  print_error "ERROR"
+  ui::stop_spinner
+  ui::print_error "ERROR"
   exit 1
 }
 
