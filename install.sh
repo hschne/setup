@@ -20,7 +20,7 @@ function main() {
     git
     gvim
     hub 
-    jdk-11-openjdk
+    jdk-10-openjdk
     maven 
     thefuck
     zsh 
@@ -30,9 +30,6 @@ function main() {
   # sudo chsh -s "/bin/zsh" "${USER}"
 
   install_packages "${pacman_packages[@]}"
-
-  # sudo pacman -Syy && sudo pacman -S --noconfirm --needed "${1[@]}"
-
 
   community_packages=(
     synology-cloud-station-drive
