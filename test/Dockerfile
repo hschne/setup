@@ -6,15 +6,22 @@ RUN pacman -Sy --noconfirm && \
   pacman-db-upgrade && \
   trust extract-compat
 
-RUN pacman -S --noconfirm wget git sudo base-devel
-run chmod 640 /etc/sudoers && \ 
+RUN pacman -S --noconfirm wget \
+  git \
+  sudo \
+  base-devel
+
+RUN chmod 640 /etc/sudoers && \ 
   echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
   chmod 440 /etc/sudoers && \
-  useradd -m -pglumpat -G wheel glumpat
+  useradd -m -p glumpat -G wheel glumpat
 
 USER glumpat
 
-WORKDIR /home/glumpat
+ENV HOME /home/glumpat
+
+VOLUME $HOME
+WORKDIR $HOME
 
 # Install yaourt like here: 
 # https://hub.docker.com/r/alekzonder/archlinux-yaourt/dockerfile
@@ -26,6 +33,6 @@ RUN git clone https://aur.archlinux.org/package-query.git && \
   cd yaourt && \
   yes | makepkg -si && \
   cd .. && \
-  sudo pacman -Sy --noconfirm yaourt && \
+  sudo rm -dR yaourt/ package-query/ && \
   yaourt -Syu --devel --aur 
 

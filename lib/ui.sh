@@ -1,3 +1,4 @@
+#! /usr/bin/env bash
 
 declare spinner_pid
 
@@ -69,12 +70,11 @@ ui::run_with_spinner() {
     $command
     result=$?
     ui::stop_spinner 
-    [[ $result -eq 0 ]] && printf "${col_green}done${col_reset}\n" || printf " ${col_red}error${col_reset}\n"
+    [[ $result -eq 0 ]] && printf " ${col_green}done${col_reset}\n" || printf " ${col_red}failed${col_reset}\n"
   else 
     ui::break
     $command
   fi
-
 }
 
 ui::_spinner() {
@@ -83,7 +83,7 @@ ui::_spinner() {
   do
     for i in $(seq 0 7)
     do
-      printf "${spinner:$i:1}"
+      printf "%s" "${spinner:$i:1}"
       printf "\010"
       sleep .3
     done
@@ -98,6 +98,8 @@ ui::start_spinner() {
 ui::stop_spinner() {
   [[ -z "$spinner_pid" ]] && return 0
 
-  kill -9 "$spinner_pid" > /dev/null 
+  kill -9 "$spinner_pid" 
+  # Use conditional to avoid exiting the program immediatly
+  wait "$spinner_pid" 2>/dev/null || true
   unset spinner_pid
 }

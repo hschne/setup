@@ -6,11 +6,17 @@ declare -g ERROR=0
 declare -g DRY_RUN=0
 declare -g DEBUG=1
 
+declare -g LOG_FILE
+
+set -uo pipefail
+
 function main() {
   ui::print_banner
   # Ask for sudo in the beginning, so that's done with
   
-  sudo_keep_alive
+  request_sudo
+
+  create_log_file
 
   pacman_packages=( 
     bat 
@@ -20,7 +26,7 @@ function main() {
     git
     gvim
     hub 
-    jdk-10-openjdk
+    jdk-openjdk
     maven 
     thefuck
     zsh 
@@ -40,27 +46,32 @@ function main() {
 
   install_community_packages "${community_packages[@]}"
 
+  print_summary
+
   exit 0
   
   install_tools
 
   reboot
 
-  print_summary
 }
 
 print_summary() {
   if [[ $ERROR -ne 0 ]]; then 
-    echo "ERrors happened, plz look at logz"
-  else 
-    echo "ALL is ok"
+    ui::print_info "Installation finished\n"
+    ui::break
+    ui::print_info "Parts of the installation failed. See '$LOG_FILE' for more information\n"
+  else
+    ui::print_info "Installation finished successfully!\n"
+    ui::break
   fi
 }
 
-configure_gdm(){
-  sudo systemctl disable lightdm && sudo systemctl enable gdm
-}
 
+
+create_log_file() {
+  LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
+}
 
 install_packages() {
   local -a packages=( "$@" )
@@ -70,9 +81,6 @@ install_packages() {
 
   ui::run_with_spinner "Installing packages..." \
     "command::execute sudo pacman -S --noconfirm ${packages[*]}"
-
-  # yaourt -S --noconfirm --needed \
-  #   synology-cloud-station-drive
 }
 
 install_community_packages() {
@@ -98,6 +106,7 @@ function install_tools() {
   nord
 }
 
+
 command::execute() {
   if [[ $DRY_RUN -eq 1 ]]; then 
     [[ $DEBUG -eq 0 ]] && return 0
@@ -105,7 +114,7 @@ command::execute() {
   fi 
 
   if [[ $DEBUG -ne 1 ]]; then 
-    "$@" >> log.txt
+    "$@" &>> "$LOG_FILE"
   else 
     "$@"
   fi
@@ -198,7 +207,8 @@ function appindicator() {
 function jetbrains_toolbox() {
   wget -O - "https://raw.githubusercontent.com/nagygergo/jetbrains-toolbox-install/master/jetbrains-toolbox.sh" | bash
 }
-sudo_keep_alive() {
+
+request_sudo() {
   if ! sudo -n true >/dev/null 2>&1; then { ui::print_prompt "Please enter your password: "; sudo -p "" -v; ui::break; }; fi
 
   # Keep-alive: update existing sudo time stamp until the script has finished
@@ -260,16 +270,19 @@ function highest_version() {
 END { print Version }' | sed -e 's/^[[:space:]]*//'
 }
 
+configure_gdm(){
+  sudo systemctl disable lightdm && sudo systemctl enable gdm
+}
+
 handle_exit() {
-  ui::stop_spinner
   ui::break
   ui::print_error "Installation aborted by user\n" 
   exit 0
 }
 
 handle_error() {
-  ui::stop_spinner
-  ui::print_error "ERROR"
+  ui::break
+  ui::print_error "Setup failed unexpectedly. See '$LOG_FILE' for more information\n"
   exit 1
 }
 
