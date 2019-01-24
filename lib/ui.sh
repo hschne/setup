@@ -1,7 +1,5 @@
 #! /usr/bin/env bash
 
-declare spinner_pid
-
 declare esc_seq="\e["
 declare col_reset="${esc_seq}0m"
 declare col_red="${esc_seq}38;5;9m"
@@ -10,7 +8,16 @@ declare col_yellow="${esc_seq}33m"
 declare col_blue="${esc_seq}34m"
 declare col_cyan="${esc_seq}38;5;44m"
 
-ui::print() {
+declare -Ag colors=( 
+  [default]="${esc_seq}0m"
+  [red]="${esc_seq}38;5;9m"
+  [green]="${esc_seq}32m"
+  [yello]="${esc_seq}33m"
+  [blue]="${esc_seq}34m"
+  [cyan]="${esc_seq}38;5;44m"
+) 
+
+console::msg() {
   local color=$1
   local subject=$2
   shift 2
@@ -19,29 +26,35 @@ ui::print() {
   printf "${color}[%-6s]${col_reset} ${col_blue}%s${col_reset} - %b" "$subject" "$time" "$1"
 }
 
-ui::print_debug() {
-  ui::print "$col_cyan" "DEBUG" "$1"
+console::print() {
+  local msg=$1
+  local color=$2
+  printf "%s%b%s" ${color} $msg ${col_reset}
 }
 
-ui::print_info() {
-  ui::print "$col_yellow" "INFO" "$1"
+console::debug() {
+  console::msg "$col_cyan" "DEBUG" "$1"
 }
 
-ui::print_error() {
-  ui::print "$col_red" "ERROR" "$1"
+console::info() {
+  console::msg "$col_yellow" "INFO" "$1"
 }
 
-ui::print_prompt() {
-  ui::print "$col_green" "PROMPT" "$1"
+console::error() {
+  console::msg "$col_red" "ERROR" "$1"
 }
 
-ui::break() {
+console::prompt() {
+  console::msg "$col_green" "PROMPT" "$1"
+}
+
+console::break() {
   printf "\n"
 }
 
-ui::print_banner() {
+console::banner() {
   clear 
-cat << "EOF"
+  cat << "EOF"
 
 +============================================================================+
 |    _____ _                             _      _____      _                 |
@@ -58,48 +71,19 @@ cat << "EOF"
 EOF
 }
 
-
-ui::run_with_spinner() {
-  local message=$1
-  shift 
-  local command=$*
-
-  ui::print_info "$message"
-  if [[ $DEBUG -eq 0 ]]; then 
-    ui::start_spinner
-    $command
-    result=$?
-    ui::stop_spinner 
-    [[ $result -eq 0 ]] && printf " ${col_green}done${col_reset}\n" || printf " ${col_red}failed${col_reset}\n"
-  else 
-    ui::break
-    $command
+console::summary() {
+  if [[ $ERROR -ne 0 ]]; then 
+    console::info "Installation finished\n"
+    console::break
+    console::info "Parts of the installation failed. See '$LOG_FILE' for more information\n"
+  else
+    console::info "Installation finished successfully!\n"
+    console::break
   fi
 }
 
-ui::_spinner() {
-  local spinner="/|\\-/|\\-"
-  while :
-  do
-    for i in $(seq 0 7)
-    do
-      printf "%s" "${spinner:$i:1}"
-      printf "\010"
-      sleep .3
-    done
-  done
+console::color() {
+  local color=$1
+  printf ${colors[color]}
 }
 
-ui::start_spinner() {
-  ui::_spinner &
-  spinner_pid=$!
-}
-
-ui::stop_spinner() {
-  [[ -z "$spinner_pid" ]] && return 0
-
-  kill -9 "$spinner_pid" 
-  # Use conditional to avoid exiting the program immediatly
-  wait "$spinner_pid" 2>/dev/null || true
-  unset spinner_pid
-}

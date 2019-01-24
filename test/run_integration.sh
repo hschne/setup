@@ -18,7 +18,7 @@ main() {
   docker run --rm -it \
     -v "$tmp_dir/setup":/home/glumpat \
     "$image_name" \
-    bash -c  "./install.sh"
+    bash -c  "./install.sh && ./test/integration.sh"
 }
 
 main "$@"
