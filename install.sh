@@ -13,40 +13,36 @@ declare -g LOG_FILE
 set -uo pipefail
 
 function main() {
-  ui::print_banner
+  console::print_banner
   # Ask for sudo in the beginning, so that's done with
   
   util::request_sudo
-  create_log_file
 
   packages::install
 
   tools::install
 
-  print_summary
+  console::summary
 
   exit 0
   
 
   util::reboot
-
-}
-
-create_log_file() {
-  LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
 }
 
 
 setup::execute() {
   if [[ $DRY_RUN -eq 1 ]]; then 
-    [[ $DEBUG -eq 0 ]] && return 0
-    ui::print_debug "Dry running '$*' \n"; return 0
+    console::debug "Skip execution of '$*' \n"; return 0
   fi 
 
-  if [[ $DEBUG -ne 1 ]]; then 
-    "$@" &>> "$LOG_FILE"
-  else 
+  if [[ $DEBUG -eq 1 ]]; then 
     "$@"
+  else
+    # Create logfile if necessary
+    [[ ! -f "$LOG_FILE" ]] && LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
+
+    "$@" &>> "$LOG_FILE"
   fi
   local result=$?
   [[ $result -ne 0 ]] && ERROR=1
@@ -58,14 +54,14 @@ configure_gdm(){
 }
 
 setup::handle_exit() {
-  ui::break
-  ui::print_error "Installation aborted by user\n" 
+  console::break
+  console::error "Installation aborted by user\n" 
   exit 0
 }
 
 setup::handle_error() {
-  ui::break
-  ui::print_error "Setup failed unexpectedly. See '$LOG_FILE' for more information\n"
+  console::break
+  console::error "Setup failed unexpectedly. See '$LOG_FILE' for more information\n"
   exit 1
 }
 

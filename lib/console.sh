@@ -1,51 +1,46 @@
 #! /usr/bin/env bash
 
-declare esc_seq="\e["
-declare col_reset="${esc_seq}0m"
-declare col_red="${esc_seq}38;5;9m"
-declare col_green="${esc_seq}32m"
-declare col_yellow="${esc_seq}33m"
-declare col_blue="${esc_seq}34m"
-declare col_cyan="${esc_seq}38;5;44m"
-
 declare -Ag colors=( 
-  [default]="${esc_seq}0m"
-  [red]="${esc_seq}38;5;9m"
-  [green]="${esc_seq}32m"
-  [yello]="${esc_seq}33m"
-  [blue]="${esc_seq}34m"
-  [cyan]="${esc_seq}38;5;44m"
+  [default]="\e[0m"
+  [red]="\e[38;5;9m"
+  [green]="\e[32m"
+  [yellow]="\e[33m"
+  [blue]="\e[34m"
+  [cyan]="\e[38;5;44m"
 ) 
 
 console::msg() {
-  local color=$1
-  local subject=$2
+  local subject=$1
+  local color=${colors[$2]}
+  local default=${colors[default]}
+  local blue=${colors[blue]}
   shift 2
   local time
   time=$(date +"%Y-%m-%d %H:%M:%S")
-  printf "${color}[%-6s]${col_reset} ${col_blue}%s${col_reset} - %b" "$subject" "$time" "$1"
+  printf "${color}[%-6s]${default} ${blue}%s${default} - %b" "$subject" "$time" "$1"
 }
 
 console::print() {
   local msg=$1
-  local color=$2
-  printf "%s%b%s" ${color} $msg ${col_reset}
+  local color=${colors[$2]}
+  local default=${colors[default]}
+  printf "%b%b%b" "${color}" "$msg" "$default"
 }
 
 console::debug() {
-  console::msg "$col_cyan" "DEBUG" "$1"
+  console::msg "DEBUG" "cyan" "$1"
 }
 
 console::info() {
-  console::msg "$col_yellow" "INFO" "$1"
+  console::msg "INFO" "yellow" "$1"
 }
 
 console::error() {
-  console::msg "$col_red" "ERROR" "$1"
+  console::msg "ERROR" "red" "$1"
 }
 
 console::prompt() {
-  console::msg "$col_green" "PROMPT" "$1"
+  console::msg "PROMPT" "green" "$1"
 }
 
 console::break() {
@@ -84,6 +79,6 @@ console::summary() {
 
 console::color() {
   local color=$1
-  printf ${colors[color]}
+  printf "%b\n" "${colors[$color]}"
 }
 
