@@ -2,25 +2,27 @@
 
 declare spinner_pid
 
-ui::run_with_spinner() {
+spinner::run() {
   local message=$1
   shift 
   local command=$*
 
-  ui::print_info "$message"
+  console::info "$message"
+  # When debugging is enabled command output is printed to tty
+  # and no progress thing is required, as that is visible anyway
   if [[ $DEBUG -eq 0 ]]; then 
-    ui::start_spinner
+    spinner::start
     $command
     result=$?
-    ui::stop_spinner 
-    [[ $result -eq 0 ]] && printf " ${col_green}done${col_reset}\n" || printf " ${col_red}failed${col_reset}\n"
+    spinner:stop
+    if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" red; fi
   else 
-    ui::break
+    console::break
     $command
   fi
 }
 
-ui::_spinner() {
+spinner::_spinner() {
   local spinner="/|\\-/|\\-"
   while :
   do
@@ -33,12 +35,12 @@ ui::_spinner() {
   done
 }
 
-ui::start_spinner() {
-  ui::_spinner &
+spinner::start() {
+  spinner::_spinner &
   spinner_pid=$!
 }
 
-ui::stop_spinner() {
+spinner:stop() {
   [[ -z "$spinner_pid" ]] && return 0
 
   kill -9 "$spinner_pid" 

@@ -21,10 +21,10 @@ packages::pacman() {
   )
   local packages_string 
   packages_string=$(printf "%s, " "${packages[@]}" | cut -d "," -f 1-${#packages[@]})
-  ui::print_info "Packages to install: $packages_string \n"
+  console::info "Packages to install: $packages_string \n"
 
-  ui::run_with_spinner "Installing packages..." \
-    "command::execute sudo pacman -S --noconfirm ${packages[*]}"
+  spinner::run "Installing packages..." \
+    "setup::execute sudo pacman -S --noconfirm ${packages[*]}"
 }
 
 packages::aur() {
@@ -36,9 +36,9 @@ packages::aur() {
   )
   local packages_string 
   packages_string=$(printf "%s, " "${packages[@]}" | cut -d "," -f 1-${#packages[@]})
-  ui::print_info "Community packages to install: $packages_string \n"
+  console::info "Community packages to install: $packages_string \n"
 
-  ui::run_with_spinner "Installing community packages..." \
-    "command::execute yaourt -S --noconfirm --needed ${packages[*]}"
+  spinner::run "Installing community packages..." \
+    "setup::execute yaourt -S --noconfirm --needed ${packages[*]}"
 
 }

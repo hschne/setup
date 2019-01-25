@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source "../lib/ui.sh"
-
 main() {
   local test_dir
   local source_dir

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-for file in ./tools/*.sh; do source "$file"; done
+#shellcheck disable=SC1090
+for file in lib/tools/*.sh; do source "$file"; done
 
 tools::install() {
   tools::appindicator
