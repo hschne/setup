@@ -7,9 +7,12 @@ RUN pacman -Sy --noconfirm && \
   trust extract-compat
 
 RUN pacman -S --noconfirm wget \
+  base-devel \
   git \
-  sudo \
-  base-devel
+  gnome \
+  gnome-extra \
+  gnome-shell \
+  sudo 
 
 RUN chmod 640 /etc/sudoers && \ 
   echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \

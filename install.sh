@@ -8,7 +8,7 @@ source "lib/packages.sh"
 
 declare -g ERROR=0
 declare -g DRY_RUN=0
-declare -g DEBUG=1
+declare -g DEBUG=0
 
 declare -g LOG_FILE=""
 
@@ -18,10 +18,7 @@ function main() {
   console::banner
   util::request_sudo
 
-
   util::generate_ssh_key
-
-  exit 0 
 
   packages::install
 
@@ -31,7 +28,6 @@ function main() {
 
   exit 0
   
-
   util::reboot
 }
 
