@@ -16,9 +16,12 @@ set -uo pipefail
 
 function main() {
   console::banner
-  # Ask for sudo in the beginning, so that's done with
-  
   util::request_sudo
+
+
+  util::generate_ssh_key
+
+  exit 0 
 
   packages::install
 
@@ -62,7 +65,7 @@ setup::handle_exit() {
 
 setup::handle_error() {
   console::break
-  console::error "Some setup steps failed. See '$LOG_FILE' for more information\n"
+  console::error "Some setup steps faile. See '$LOG_FILE' for more information\n"
   exit 1
 }
 

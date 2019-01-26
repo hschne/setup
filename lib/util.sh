@@ -1,11 +1,32 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 
-generate_ssh_key() {
-  cat "/dev/zero" | ssh-keygen -b 4096 -q -N "" -C "$1"
+util::generate_ssh_key() {
+  spinner::run "Installing prerequisite utilities..." "setup::execute sudo pacman -S --noconfirm xclip"
+
+  console::prompt "The setup requires a new SSH key to be generated.\n"
+  console::prompt "Please enter your email: " && { local email; read -e -r email; }
+  local filename="id_rsa"
+  
+  ssh-keygen -b 4096 -t rsa -N '' -q -C "$email" -f "$HOME/.ssh/id_rsa"
+  local result=$?
+
+  if [[ $result != 0 ]]; then 
+    console::error "Failed to create new SSH key, aborting setup\n"
+    exit 1
+  else
+    console::info "New SSH key '~/.ssh/$filename' generated:\n\n" 
+  fi
+ 
+
+  cat < "$HOME/.ssh/id_rsa.pub" | fold | awk '{ print "\t" $0 }'
+  console::break
+  xclip -sel clip < "$HOME/.ssh/id_rsa.pub"
+  console::info "Key has been copied to the clipboard!\n"
+  console::prompt "Add your key to your Github account (https://github.com/) and continue...\n" && read -r -e x
 }
 
 util::request_sudo() {
-  if ! sudo -n true >/dev/null 2>&1; then { ui::print_prompt "Please enter your password: "; sudo -p "" -v; ui::break; }; fi
+  if ! sudo -n true >/dev/null 2>&1; then { console::prompt "Please enter your password: "; sudo -p "" -v; console::break; }; fi
 
   # Keep-alive: update existing sudo time stamp until the script has finished
   # See here: https://gist.github.com/cowboy/3118588
@@ -16,5 +37,5 @@ util::request_sudo() {
 # Reboot after prompting the user for it
 # Taken from https://unix.stackexchange.com/a/426189
 util::reboot() {
-  echo "Setup completed. Reboot? (y/n)" && read x && [[ "$x" == "y" ]] && /sbin/reboot; 
+  echo "Setup completed. Reboot? (y/N)" && read -r -e x && [[ "$x" == "y" ]] && /sbin/reboot; 
 }
