@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 tools::install_vundle() {
-  gclone "https://github.com/VundleVim/Vundle.vim.git" ~/.vim/bundle/Vundle.vim
+  console::info "Setting up Vundle and Vim plugins"
+  local repo="VundleVim/Vundle.vim"
+  local destination="$HOME/.vim/bundle/Vundle.vim"
+  spinner::run "Cloning '$repo' into '$destination'" \
+    tools::gclone "$repo" "$destination"
 
-  vim +PluginInstall +qall
+  setup::execute vim +PluginInstall +qall
+  console::result "Installed Vim plugins successfully\n" "Failed to install Vim plugins\n"
 }

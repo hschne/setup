@@ -66,6 +66,18 @@ console::banner() {
 EOF
 }
 
+console::result() {
+  local result=$?
+  local success_message="$1"
+  local error_message="$2"
+  if [[ $result -eq 0 ]]; then 
+    console::info "$success_message"
+  else 
+    ERROR=1
+    console::error "$error_message"
+  fi
+}
+
 console::summary() {
   if [[ $ERROR -ne 0 ]]; then 
     console::info "Installation finished\n"
@@ -74,6 +86,7 @@ console::summary() {
   else
     console::info "Installation finished successfully!\n"
     console::break
+    util::reboot
   fi
 }
 

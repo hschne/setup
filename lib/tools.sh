@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 #shellcheck disable=SC1090
-for file in lib/tools/*.sh; do source "$file"; done
+for file in ./lib/tools/*.sh; do source "$file"; done
 
 tools::install() {
   tools::appindicator
   tools::jetbrains_toolbox
-  tools::rbenv
-  tools::pyenv
-  tools::nvm
+  # tools::rbenv
+  # tools::pyenv
+  # tools::nvm
   tools::zplug
-  tools::homshick
+  # tools::homeshick
   tools::nord
 }
 
@@ -30,9 +30,9 @@ tools::gclone() {
   local git="/usr/bin/git"
   local source="https://github.com/$1.git"
   local destination="$2"
-  [[ -z $destination ]] &&  destination="$HOME"
+  [[ -z $destination ]] && destination="$HOME"
 
-  "${git}" clone --depth 1 "$source" "$destination"
+  setup::execute "${git}" clone --depth 1 "$source" "$destination"
 }
 
 # Returns the highest version from a list of version strings,

@@ -5,20 +5,19 @@ declare spinner_pid
 spinner::run() {
   local message=$1
   shift 
-  local command=$*
 
   console::info "$message"
   # When debugging is enabled command output is printed to tty
   # and no progress thing is required, as that is visible anyway
   if [[ $DEBUG -eq 0 ]]; then 
     spinner::start
-    $command
+    "$@"
     result=$?
     spinner:stop
     if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" red; fi
   else 
     console::break
-    $command
+    "$@"
   fi
 }
 

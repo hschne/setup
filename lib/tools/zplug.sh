@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
 tools::zplug() {
-  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+  console::info "Setting up zplug\n"
+  setup::execute sudo chsh -s "/bin/zsh" "$USER"
+  console::result "Default shell changed to zsh\n" "Failed to change shell to zsh\n"
+  local destination="$HOME/.zplug"
+  spinner::run "Cloning 'zplug/zplug' into '$destination'"\
+    tools::gclone zplug/zplug "$destination"
 }

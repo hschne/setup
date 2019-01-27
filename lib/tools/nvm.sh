@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
 tools::nvm() {
+  console::info "Setting up nvm and node\n"
   local nvm_root="${HOME}/.nvm"
-  gclone "https://github.com/creationix/nvm.git" "${nvm_root}"
+  
+  spinner::run "Cloning 'creationix/nvm'" \
+    tools::gclone creationix/nvm "${nvm_root}"
 
   # Make nvm immediatly accessible in shell
   export NVM_DIR="${HOME}/.nvm"
+  #shellcheck disable=SC1090
   source "${NVM_DIR}/nvm.sh"
-  nvm install node
+  spinner::run "Installing latest version of node" \
+    setup::execute \
+      nvm install node
 }

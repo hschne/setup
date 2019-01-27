@@ -15,8 +15,9 @@ main() {
   # Run installation & integration tests in docker container
   docker run --rm -it \
     -v "$tmp_dir/setup":/home/glumpat \
+    -e USER="glumpat" \
     "$image_name" \
-    bash -c  "./install.sh && ./test/integration.sh"
+    bash -c  "./install.sh --debug && ./test/integration.sh"
 }
 
 main "$@"
