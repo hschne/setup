@@ -9,7 +9,7 @@ tools::install() {
   tools::rbenv
   tools::pyenv
   tools::nvm
-  tools::tmux
+  # tools::tmux
   tools::zplug
   tools::homeshick
   tools::nord
