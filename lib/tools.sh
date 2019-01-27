@@ -6,11 +6,12 @@ for file in ./lib/tools/*.sh; do source "$file"; done
 tools::install() {
   tools::appindicator
   tools::jetbrains_toolbox
-  # tools::rbenv
-  # tools::pyenv
-  # tools::nvm
+  tools::rbenv
+  tools::pyenv
+  tools::nvm
+  tools::tmux
   tools::zplug
-  # tools::homeshick
+  tools::homeshick
   tools::nord
 }
 

@@ -17,6 +17,7 @@ packages::pacman() {
     maven 
     thefuck
     zsh 
+    tmux
   )
   local packages_string 
   
