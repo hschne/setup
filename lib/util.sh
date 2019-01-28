@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 util::generate_ssh_key() {
-  spinner::run "Installing prerequisite utilities..." "setup::execute sudo pacman -S --noconfirm xclip"
+  spinner::run "Installing xclip..." \
+    setup::execute sudo pacman -S --noconfirm xclip
 
   console::info "The setup requires a new SSH key to be generated.\n"
   console::prompt "Please enter your email: " && { local email; read -e -r email; }

@@ -13,7 +13,7 @@ tools::nord() {
 
   chmod +x "$tempfile"
 
-  spinner::run "Installing nord color scheme"\
+  spinner::run "Installing nord color scheme..."\
     setup::execute \
     "$tempfile" 
 }

@@ -5,14 +5,15 @@ for file in ./lib/tools/*.sh; do source "$file"; done
 
 tools::install() {
   tools::appindicator
-  tools::jetbrains_toolbox
-  tools::rbenv
-  tools::pyenv
-  tools::nvm
-  # tools::tmux
-  tools::zplug
+  tools::gnome
   tools::homeshick
+  tools::jetbrains_toolbox
   tools::nord
+  tools::nvm
+  tools::pyenv
+  tools::rbenv
+  tools::zplug
+  tools::docker 
 }
 
 # A wrapper around git clone. Does not rely on the path and clones with shallow 

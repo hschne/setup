@@ -16,6 +16,7 @@ set -uo pipefail
 
 function main() {
   console::banner
+  
   setup::parse_arguments "$@"
 
   util::request_sudo
@@ -28,8 +29,6 @@ function main() {
 
   console::summary
 
-  exit 0
-  
   util::reboot
 }
 
@@ -47,10 +46,6 @@ setup::execute() {
   return $result
 }
 
-# TODO: Move this to appropriate tool file
-configure_gdm(){
-  sudo systemctl disable lightdm && sudo systemctl enable gdm
-}
 
 setup::parse_arguments() {
   local positional=()
