@@ -2,7 +2,7 @@
 
 Setup a place like home. Fully automated Antergos setup script. Install all the packages, and all the CLI tools.
 
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/glumpat/setup/master/install.sh)"
+    git clone https://github.com/glumpat/setup.git && cd setup && ./install.sh
 
 Have a look at the [script](install.sh) for more info.
 
@@ -10,6 +10,4 @@ Have a look at the [script](install.sh) for more info.
 
 - [Restrict Alt Tab to Workspace](https://askubuntu.com/a/759740) 
 - Backup & Restore Keybindings
-- SSH clone for homeshick
-- Better lockscreen: GDM, see [Reddit](https://www.reddit.com/r/antergos/comments/7ghz7v/installed_antergos_gnome_whats_with_this_terrible/)
     

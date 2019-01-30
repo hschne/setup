@@ -30,7 +30,7 @@ tools::install() {
 # 
 tools::gclone() {
   local git="/usr/bin/git"
-  local source="https://github.com/$1.git"
+  local source="git@github.com/$1.git"
   local destination="$2"
   [[ -z $destination ]] && destination="$HOME"
 
