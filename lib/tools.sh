@@ -4,6 +4,9 @@
 for file in ./lib/tools/*.sh; do source "$file"; done
 
 tools::install() {
+  # Before we do anything, add github to known hosts
+  ssh-keyscan github.com >> ~/.ssh/known_hosts
+
   tools::appindicator
   tools::gnome
   tools::homeshick
@@ -18,7 +21,7 @@ tools::install() {
 
 # A wrapper around git clone. Does not rely on the path and clones with shallow 
 # in order to speed up process. 
-#
+
 # Arguments:
 #
 # $1 - The URL to clone from.
