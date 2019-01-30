@@ -4,7 +4,7 @@ main() {
   local test_dir
   local source_dir
   local tmp_dir 
-  # Set up sources: Copy everything to a temporary directory
+  # Set up sources: Copy everything to a temporary directory 
   test_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"   
   source_dir="$(dirname "$test_dir")"
   tmp_dir=$(mktemp -d)
@@ -17,7 +17,7 @@ main() {
     -v "$tmp_dir/setup":/home/glumpat \
     -e USER="glumpat" \
     "$image_name" \
-    bash -c  "./install.sh $* && ./test/integration.sh"
+    bash -c  "./install.sh $*"
 }
 
 main "$@"
