@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 tools::docker() {
-  console::info "Configuring docker"
-  setup::execute sudo groupadd docker && sudo usermod -aG docker "$USER" 
-  console::result "Successfully configured docker" "Failed to add user to docker user group"
+  console::info "Configuring docker\n"
+  setup::execute sudo usermod -aG docker "$USER" 
+  setup::execute sudo systemctl enable docker
+  console::result "Successfully configured docker\n" "Failed to add user to docker user group\n"
 }
