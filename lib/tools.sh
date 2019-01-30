@@ -5,7 +5,7 @@ for file in ./lib/tools/*.sh; do source "$file"; done
 
 tools::install() {
   # Before we do anything, add github to known hosts
-  ssh-keyscan github.com >> ~/.ssh/known_hosts
+  ssh-keyscan github.com 2>/dev/null >> ~/.ssh/known_hosts
 
   tools::appindicator
   tools::gnome
