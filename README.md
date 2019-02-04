@@ -10,4 +10,4 @@ Have a look at the [script](install.sh) for more info.
 
 - [Restrict Alt Tab to Workspace](https://askubuntu.com/a/759740) 
 - Backup & Restore Keybindings
-    
+- Gnome Extension: [Topicons Plus](https://github.com/phocean/TopIcons-plus)
