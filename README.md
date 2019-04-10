@@ -10,4 +10,7 @@ Have a look at the [script](install.sh) for more info.
 
 - [Restrict Alt Tab to Workspace](https://askubuntu.com/a/759740) 
 - Backup & Restore Keybindings
-- Gnome Extension: [Topicons Plus](https://github.com/phocean/TopIcons-plus)
+- Gnome Extension: [No Topleft Hot Corner](https://github.com/HROMANO/nohotcorner/)
+- Tmux & Tmux plugins
+- Haskell & related stuff (Stack, linters, latest ghc...)
+- Seperate programming langues 
