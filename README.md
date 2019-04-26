@@ -13,4 +13,5 @@ Have a look at the [script](install.sh) for more info.
 - Gnome Extension: [No Topleft Hot Corner](https://github.com/HROMANO/nohotcorner/)
 - Tmux & Tmux plugins
 - Haskell & related stuff (Stack, linters, latest ghc...)
-- Seperate programming langues 
+- Seperate programming langues into neater units
+- Seperate out logging, spinner etc
