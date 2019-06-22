@@ -12,6 +12,7 @@ Have a look at the [script](install.sh) for more info.
 - Backup & Restore Keybindings
 - Gnome Extension: [No Topleft Hot Corner](https://github.com/HROMANO/nohotcorner/)
 - Tmux & Tmux plugins
-- Haskell & related stuff (Stack, linters, latest ghc...)
 - Seperate programming langues into neater units
-- Seperate out logging, spinner etc
+- Seperate out logging? 
+- Remove gnome stuff, because we are using to i3 :heart:
+- Alacritty
