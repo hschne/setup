@@ -6,13 +6,19 @@ Setup a place like home. Fully automated Antergos setup script. Install all the 
 
 Have a look at the [script](install.sh) for more info.
 
-## Improvements & Updates:
+## Development
 
-- [Restrict Alt Tab to Workspace](https://askubuntu.com/a/759740) 
-- Backup & Restore Keybindings
-- Gnome Extension: [No Topleft Hot Corner](https://github.com/HROMANO/nohotcorner/)
-- Tmux & Tmux plugins
-- Seperate programming langues into neater units
-- Seperate out logging? 
-- Remove gnome stuff, because we are using to i3 :heart:
-- Alacritty
+In order to test if your script you can utilize Docker. For testing single commands you may run
+
+```
+docker run --rm -ti -v $PWD:/home/ archlinux/base bash
+```
+
+To execute the install script in a sandboxed container execute
+
+```
+./test/docker-install.sh --debug
+```
+
+You may also use `--dry-run` to speed up execution by avoiding calling real commands.
+

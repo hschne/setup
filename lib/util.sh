@@ -37,12 +37,3 @@ util::request_sudo() {
 }
 
 
-# Reboot after prompting the user for it
-# Taken from https://unix.stackexchange.com/a/426189
-util::reboot() {
-  console::prompt "It is recommendet that you reboot your PC\n"
-  console::prompt "Would you like to reboot now? (y/N) " && read -r -e x
-  if [[ "$x" == "y" ]]; then 
-    sudo shutdown -r now
-  fi
-}
