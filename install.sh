@@ -65,6 +65,23 @@ setup::parse_arguments() {
   set -- "${positional[@]}" # restore positional parameters
 }
 
+setup::upload_ssh() {
+  local username=$1
+  local password=$2
+  local otp=$3
+
+  local name="$user@$(hostname)"
+
+status =$(curl -o /dev/null \
+  -s -w "%{http_code}\n" \
+  -u "$username:$password" \
+  --data "{\"title\":\"$name\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
+  https://api.github.com/user/keys)
+  echo "Result $?"
+  
+
+}
+
 # Wait executes a command and wraps it in a spinner.
 # 
 # Arguments:
@@ -141,7 +158,8 @@ setup::install_packages() {
     sudo -u "$user" yay -S --noconfirm \
     dialog \
     diff-so-fancy \
-    zsh 
+    zsh \
+    ripgrep \
     # alacritty \
     # chromium \
     # docker  \
@@ -163,7 +181,9 @@ setup::install_packages() {
   # ttf-font-awesome \
   # ttf-material-icons-git \
   # vlc \
+  # shellcheck
 }
+
 
 setup::install_tools() {
   # Before we do anything, add github to known hosts
@@ -181,8 +201,14 @@ setup::install_tools() {
   local destination="$HOME/.zplug"
   setup::wait "Setting up zplug..."\
     setup::execute \
-    sudo -u "$user" chsh -s "/bin/zsh" "$user" \
-    sudo -u "$user" /usr/bin/git clone "git@github.com:zplug/zplug.git" "$destination"
+  "$user" chsh -s "/bin/zsh" "$user" 
+  setup::wait gclone "git@github.com:zplug/zplug.git" "$destination"
+
+
+  console::info "Setting up TMP and installing tmux plugins..."
+  setup::wait "Setting up zplug..."\ 
+    setup::execute git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  ~/.tmux/plugins/tpm/scripts/install_plugins.sh
 }
 
 setup::generate_ssh_key() {
@@ -208,6 +234,35 @@ setup::generate_ssh_key() {
   echo "github.com" > "$HOME/.ssh/known_hosts"
 }
 
+# Wait executes a command and wraps it in a spinner.
+# 
+# Arguments:
+#
+# $1 - The URL to clone from.
+# $2 - The destination to clone to.
+#
+# Examples
+#
+#   gclone "http://someurl/myrepo.git" $HOME
+# 
+setup::wait() {
+  local message=$1
+  shift 
+
+  console::info "$message"
+  # When debugging is enabled command output is printed to tty
+  # and no progress thing is required, as that is visible anyway
+  if [[ $DEBUG -eq 0 ]]; then 
+    spinny::start
+    "$@"
+    result=$?
+    spinny:stop
+    if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" red; fi
+  else 
+    console::break
+    "$@"
+  fi
+}
 # A wrapper around git clone. Does not rely on the path and clones with shallow 
 # in order to speed up process. 
 
@@ -277,8 +332,28 @@ setup::handle_error() {
   exit 1
 }
 
+util::request_sudo() {
+  if ! sudo -n true >/dev/null 2>&1; then { console::prompt "Please enter your password: "; sudo -p "" -v; console::break; }; fi
+
+  # Keep-alive: update existing sudo time stamp until the script has finished
+  # See here: https://gist.github.com/cowboy/3118588
+  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+}
 trap 'setup::handle_exit $?' 2
 trap 'setup::handle_error $?' ERR
 
+setup::execute() {
+  if [[ $DRY_RUN -eq 1 ]]; then 
+    console::debug "Skip execution of '$*' \n"; return 0
+  fi 
+  [[ ! -f "$LOG_FILE" ]] && LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
+  if [[ $DEBUG -eq 1 ]]; then 
+    "$@" | tee -a "$LOG_FILE"
+  else
+    "$@" &>> "$LOG_FILE"
+  fi
+  local result=$?
+  return $result
+}
 # Entrypoint
 main "$@"

@@ -28,12 +28,5 @@ util::generate_ssh_key() {
   console::info "Added 'github.com' to known hosts\n"
 }
 
-util::request_sudo() {
-  if ! sudo -n true >/dev/null 2>&1; then { console::prompt "Please enter your password: "; sudo -p "" -v; console::break; }; fi
-
-  # Keep-alive: update existing sudo time stamp until the script has finished
-  # See here: https://gist.github.com/cowboy/3118588
-  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-}
 
 
