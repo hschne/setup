@@ -10,9 +10,9 @@ main() {
   
   # Run installation & integration tests in docker container
   docker run --rm -it \
-    -v "$tmp_dir/setup":/home \
+    -v "$tmp_dir/setup":/home/glumpat \
     "glumpat/setup-test" \
-    bash -c  "cd /home && ./install.sh $*"
+    bash -c  "cd /home/glumpat && ./install.sh $*"
 }
 
 main "$@"
