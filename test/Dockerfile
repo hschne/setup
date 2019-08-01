@@ -16,6 +16,7 @@ RUN chmod 640 /etc/sudoers && \
 
 USER glumpat
 
+ENV USER glumpat
 ENV HOME /home/glumpat
 
 VOLUME $HOME

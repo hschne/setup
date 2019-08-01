@@ -115,7 +115,7 @@ setup::install_packages() {
     sudo makepkg -si --noconfirm 
   cd .. &&  rm -rf yay 
 
-  setup::wait "Installing packages. This could take a while..." \
+  setup::wait "Installing all the packages. This could take a while..." \
     setup::execute \
     sudo yay -S --noconfirm \
     dialog \
@@ -180,14 +180,16 @@ setup::install_tools() {
 
   local homeshick_root="$HOME/.homesick/repos/homeshick"
   homeshick_bin="$homeshick_root/bin/homeshick"
-  setup::wait "Setting up Homeshick..."\
-    setup::gclone "git@github.com:andsens/homeshick.git" "$homeshick_root" 
-  setup::wait "Setting up Homeshick..."\
-    "${homeshick_bin}" clone --batch git@github.com/glumpat/dotfiles && \
-  "${homeshick_bin}" link --force
+  setup::wait "Setting up Homeshick..." \
+    setup::gclone "andsens/homeshick" "$homeshick_root" 
+  setup::wait "Cloning your castles..."\
+    "${homeshick_bin}" clone --batch git@github.com:glumpat/dotfiles.git && \
+  setup::execute \
+    "${homeshick_bin}" link --force
 
   local destination="$HOME/.zplug"
-  sudo chsh -s "/bin/zsh" "$USER" 
+  setup::execute \
+    chsh -s "/bin/zsh" "$USER" 
   setup::wait "Setting up zplug..."\
     setup::execute \
     gclone "git@github.com:zplug/zplug.git" "$destination"
