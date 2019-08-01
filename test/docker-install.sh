@@ -11,7 +11,7 @@ main() {
   # Run installation & integration tests in docker container
   docker run --rm -it \
     -v "$tmp_dir/setup":/home \
-    "archlinux/base" \
+    "glumpat/setup-test" \
     bash -c  "cd /home && ./install.sh $*"
 }
 
