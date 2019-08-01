@@ -5,10 +5,8 @@ source "lib/util.sh"
 source "lib/spinny.sh"
 
 ERROR=0
-DRY_RUN=0
 DEBUG=0
 
-STAGE=0
 LOG_FILE=""
 
 user="hschne"
@@ -18,22 +16,30 @@ set -oe pipefail
 
 function main() {
   console::banner
-  
+
   setup::parse_arguments "$@"
 
-  if [[ "$STAGE" -eq 0 ]]; then 
-    local dir; dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    setup::create_user
-    sudo -u "$user" "$dir/setup.sh" "$@" --continue 
-    console::summary
-    setup::reboot
-  else 
-    setup::install_tools
-  fi
+  setup::setup_output
 
-  # setup::install_packages
+  setup::user
 
+  setup::ssh
 
+  setup::install_tools
+
+  setup::install_packages
+
+  console::summary
+
+  setup::reboot
+}
+
+setup::setup_output(){
+  if [[ "$DEBUG" -eq 1 ]]; then
+  exec 3>&2 
+else 
+  exec 3>/dev/null
+fi
 }
 
 setup::parse_arguments() {
@@ -47,94 +53,63 @@ setup::parse_arguments() {
         DEBUG=1
         shift 
         ;;
-      --dry-run)
-        console::info "Dry run option set\n"
-        DRY_RUN=1
-        shift
-        ;;
-      --continue)
-        STAGE=1
-        shift 
-        ;;
       *) 
         positional+=("$1") # save it in an array for later
-        shift # past argument
+        shift
         ;;
     esac
   done
   set -- "${positional[@]}" # restore positional parameters
 }
 
-# Wait executes a command and wraps it in a spinner.
-# 
-# Arguments:
-#
-# $1 - The URL to clone from.
-# $2 - The destination to clone to.
-#
-# Examples
-#
-#   gclone "http://someurl/myrepo.git" $HOME
-# 
-setup::wait() {
-  local message=$1
-  shift 
-
-  console::info "$message"
-  # When debugging is enabled command output is printed to tty
-  # and no progress thing is required, as that is visible anyway
-  if [[ $DEBUG -eq 0 ]]; then 
-    spinny::start
-    "$@"
-    result=$?
-    spinny:stop
-    if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" red; fi
-  else 
-    console::break
-    "$@"
-  fi
-}
-
-setup::execute() {
-  if [[ $DRY_RUN -eq 1 ]]; then 
-    console::debug "Skip execution of '$*' \n"; return 0
-  fi 
-  [[ ! -f "$LOG_FILE" ]] && LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
-  if [[ $DEBUG -eq 1 ]]; then 
-    "$@" | tee -a "$LOG_FILE"
-  else
-    "$@" &>> "$LOG_FILE"
-  fi
-  local result=$?
-  return $result
-}
-
-setup::create_user() {
-  setup::wait "Synchronizing database and installing basics... "\
-    setup::execute \
-    pacman -Sy --noconfirm  \
+setup::user() {
+  setup::spinstart "Installing some bare necessities..."
+   pacman -Sy --noconfirm  \
     base-devel \
     git \
+    curl \
     openssh \
     sudo \
-    xclip
+    inetutils
+  setup::spinstop
 
-  setup::wait "Creating new user... "\
-    setup::execute \
-    chmod 640 /etc/sudoers && \
-    echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
-    chmod 440 /etc/sudoers && \
-    useradd -m -p "$user" -G wheel "$user" && 
-  cd "$HOME"
+  console::info "Creating new user...\n"
+  chmod 640 /etc/sudoers 
+  echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+  chmod 440 /etc/sudoers 
+  useradd -m -p "$user" -G wheel "$user" 
+}
+
+setup::ssh() {
+  console::info "The setup requires a new SSH key to be generated.\n"
+  console::prompt "Please enter your email: " && { local email; read -e -r email; }
+
+  sudo -u "$user" mkdir $HOME/.ssh >&3
+  sudo -u "$user" ssh-keygen -b 4096 -t rsa -N '' -q -C "$email" -f "$HOME/.ssh/id_rsa"
+
+  console::info "New SSH key generated. Now let's upload that to GitHub!\n"
+  console::prompt "Please enter your Github username: " && { local login; read -e -r login; }
+  console::prompt "Now your password: " && { local password; read -e -r password; }
+  console::prompt "And finally your Github OTP code: " && { local password; read -e -r otp; }
+  key_data="$( cat "$HOME/.ssh/id_rsa")"
+  title="$user@$(hostname)"
+  curl -u "$login:$password"  \
+    --header "authorization: Basic $password" \
+    --header 'content-type: application/json' \
+    --header "x-github-otp: $otp" \
+    --data "{\"title\":\"$title\",\"key\":\"$key_data\"}" \
+    https://api.github.com/user/keys
+
+  ssh -T git@github.com 2>&1 | grep "success"
+  echo "github.com" > "$HOME/.ssh/known_hosts"
+  console::info "Added 'github.com' to known hosts\n"
 }
 
 setup::install_packages() {
-  setup::wait "Updating package database and installing yay..." \
-    setup::execute \
-    sudo -u "$user" git clone https://aur.archlinux.org/yay.git && \
-    cd yay && \
-    sudo -u "$user" makepkg -si --noconfirm &&
-    cd .. && rm -rf yay \
+  setup::spinstart "Updating package database and installing yay..." \
+    sudo -u "$user" git clone https://aur.archlinux.org/yay.git && cd yay
+  sudo -u "$user" makepkg -si --noconfirm 
+  cd .. &&  rm -rf yay 
 
   setup::wait "Installing packages. This could take a while..." \
     setup::execute \
@@ -142,9 +117,9 @@ setup::install_packages() {
     dialog \
     diff-so-fancy \
     zsh 
-    # alacritty \
-    # chromium \
-    # docker  \
+  # alacritty \
+  # chromium \
+  # docker  \
   # docker-compose \
   # feh \
   # firefox-developer-edition \
@@ -208,6 +183,27 @@ setup::generate_ssh_key() {
   echo "github.com" > "$HOME/.ssh/known_hosts"
 }
 
+setup::spinstart() {
+  if [[ $DEBUG -eq 1 ]]; then
+    console::info "$1\n"
+  else
+    console::info "$1\n"
+    spinny::start
+  fi
+}
+
+setup::spinstop() {
+  result=$?
+
+  [[ $DEBUG -eq 1 ]] && return 0
+  spinny::stop
+  if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" red; fi
+}
+
+setup::skip() {
+  console::debug "Skip execution of '$*' \n"; return 0
+}
+
 # A wrapper around git clone. Does not rely on the path and clones with shallow 
 # in order to speed up process. 
 
@@ -263,6 +259,11 @@ setup::reboot() {
   if [[ "$x" == "y" ]]; then 
     reboot
   fi
+}
+
+setup::die(){
+  local message=$1
+  console::error "$message\n" && exit 1
 }
 
 setup::handle_exit() {
