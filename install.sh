@@ -21,10 +21,6 @@ function main() {
 
   setup::github
   
-  setup::asdf
-  return
-
-
   setup::packages
 
   setup::plugins
@@ -127,10 +123,33 @@ setup::packages() {
   setup::wait "Installing all the packages. This could take a while..." \
     setup::execute \
     yay -S --noconfirm \
-    zsh \
-    tmux \
+    alacritty \
+    chromium \
+    dialog \
+    diff-so-fancy \
     docker \
-    gdm
+    docker-compose \
+    feh \
+    firefox-developer-edition \
+    gdm \
+    gvim \
+    hub  \
+    i3-wm \
+    jetbrains-toolbox \
+    jsoncpp 
+    nerd-fonts-complete \
+    polybar \
+    pulseaudio \
+    rambox-bin \
+    ripgrep \
+    spotify \
+    synology-cloud-station-drive \
+    thefuck \
+    tmux \
+    ttf-font-awesome \
+    ttf-material-icons-git \
+    vlc \
+    zsh 
 }
 
 setup::plugins() {
