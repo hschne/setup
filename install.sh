@@ -19,7 +19,7 @@ function main() {
 
   setup::basics
 
-  # setup::github
+  setup::github
 
   setup::packages
 
@@ -41,9 +41,9 @@ setup::request_sudo() {
     sudo -p "" -v -n; console::break; 
   }; fi
 
-# Keep-alive: update existing sudo time stamp until the script has finished
-# See here: https://gist.github.com/cowboy/3118588
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+  # Keep-alive: update existing sudo time stamp until the script has finished
+  # See here: https://gist.github.com/cowboy/3118588
+  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
 setup::parse_arguments() {
@@ -117,38 +117,16 @@ setup::packages() {
     setup::execute git clone https://aur.archlinux.org/yay.git 
   cd yay
   setup::wait "Installing yay... " \
-    makepkg -si --noconfirm 
+    setup::execute makepkg -si --noconfirm 
   cd .. &&  rm -rf yay 
 
   setup::wait "Installing all the packages. This could take a while..." \
     setup::execute \
     yay -S --noconfirm \
-    alacritty \
-    chromium \
-    dialog \
-    diff-so-fancy \
-    docker  \
-    docker-compose \
-    feh \
-    firefox-developer-edition \
-    gvim \
-    hub  \
-    i3-wm \
-    jetbrains-toolbox \
-    jsoncpp 
-    nerd-fonts-complete \
-    polybar \
-    pulseaudio \
-    rambox-bin \
-    ripgrep \
-    spotify \
-    synology-cloud-station-drive \
-    thefuck \
+    zsh \
     tmux \
-    ttf-font-awesome \
-    ttf-material-icons-git \
-    vlc \
-    zsh 
+    docker \
+    gdm
 }
 
 setup::plugins() {
@@ -164,29 +142,30 @@ setup::plugins() {
     "${homeshick_bin}" link --force
 
   local zplug_root="$HOME/.zplug"
-  setup::execute \
-    chsh -s "/bin/zsh" "$USER" 
   setup::wait "Setting up zplug..."\
     setup::execute \
-    gclone "git@github.com:zplug/zplug.git" "$zplug_root"
+    setup::gclone "zplug/zplug" "$zplug_root"
 
   local tpm_root="$HOME/.tmux/plugins/tpm"
   setup::wait "Downloading Tmux plugin manager... "\
-    setup::gclone tmux-plugins/tpm "$tpm_root"
+    setup::gclone "tmux-plugins/tpm" "$tpm_root"
+  tmux start-server
+  tmux new-session -d
   setup::wait "Installing Tmux plugins..." \
     setup::execute \
     "$tpm_root/scripts/install_plugins.sh"
+  tmux kill-server
 
 }
 
 setup::asdf() {
   local asdf_root="$HOME/.asdf"
-  # setup::wait "Downloading asdf-vm... "\
-  #   setup::gclone "asdf-vm/asdf" "$asdf_root"
+  setup::wait "Downloading asdf-vm... "\
+    setup::gclone "asdf-vm/asdf" "$asdf_root"
   local asdf; asdf="$asdf_root/asdf"
   # Create a temporary executable for use in subshells
   cat "$asdf_root/asdf.sh" >> "$asdf" && echo "asdf \"\$@\"" >> "$asdf" && chmod +x "$asdf"
-  # "$asdf" plugin-add ruby
+  "$asdf" plugin-add ruby
   local latest
   console::info "Installing the latest Ruby... "
   setup::spinstart
@@ -208,6 +187,8 @@ setup::asdf() {
 }
 
 setup::services() {
+  # Set zsh as default
+  setup::execute sudo chsh -s "/bin/zsh" "$USER" 
   # Enable docker
   setup::execute sudo usermod -aG docker "$USER" 
   setup::execute sudo systemctl enable docker

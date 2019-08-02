@@ -6,19 +6,25 @@ Setup a place like home. Fully automated Antergos setup script. Install all the 
 
 Have a look at the [script](install.sh) for more info.
 
+
+
 ## Development
 
-In order to test if your script you can utilize Docker. For testing single commands you may run
+In order to test if your script you can utilize Docker with a custom imagge. Build it using
 
 ```
-docker run --rm -ti -v $PWD:/home/ archlinux/base bash
+docker build -t 'glumpat/setup-test' .
 ```
 
-To execute the install script in a sandboxed container execute
+Debugging specific parts of the script is possible by attaching to the image
+```
+docker run --rm -ti -v $PWD:/home/ glumpat/setup-test bash
+```
+
+To execute the entire install script execute
 
 ```
 ./test/docker-install.sh --debug
 ```
 
-You may also use `--dry-run` to speed up execution by avoiding calling real commands.
 
