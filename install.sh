@@ -116,45 +116,61 @@ setup::packages() {
   setup::wait "Downloading Yay... " \
     setup::execute git clone https://aur.archlinux.org/yay.git 
   cd yay
-  setup::wait "Installing yay... " \
+  setup::wait "Installing Yay... " \
     setup::execute makepkg -si --noconfirm 
   cd .. &&  rm -rf yay 
 
-  setup::wait "Installing all the packages. This could take a while... " \
+  setup::wait "Installing desktop packages... " \
+    setup::execute \
+    yay -S --noconfirm \
+    feh \
+    gdm \
+    i3-wm \
+    jsoncpp \
+    polybar \
+    rofi 
+
+  setup::wait "Installing fonts... " \
+    setup::execute \
+    yay -S --noconfirm \
+    nerd-fonts-complete \
+    ttf-font-awesome \
+    ttf-material-icons-git 
+
+  setup::wait "Installing CLI tools... " \
     setup::execute \
     yay -S --noconfirm \
     alacritty \
-    chromium \
-    dialog \
     diff-so-fancy \
-    docker \
-    docker-compose \
-    feh \
-    firefox-developer-edition \
-    gdm \
+    fzf \
     gvim \
-    hub  \
-    i3-wm \
-    jetbrains-toolbox \
-    jsoncpp 
-    nerd-fonts-complete \
-    polybar \
-    pulseaudio \
-    rambox-bin \
+    hub \
     ripgrep \
-    spotify \
-    synology-cloud-station-drive \
     thefuck \
     tmux \
-    ttf-font-awesome \
-    ttf-material-icons-git \
-    vlc \
     zsh 
+
+  setup::wait "Installing browsers and dev tools... " \
+    setup::execute \
+    yay -S --noconfirm \
+    chromium \
+    docker \
+    docker-compose \
+    firefox-developer-edition \
+    jetbrains-toolbox 
+
+  setup::wait "Installing drivers, utilities and apps stuff... " \
+    setup::execute \
+    yay -S --noconfirm \
+    dialog \
+    pulseaudio \
+    rambox-bin \
+    spotify \
+    synology-cloud-station-drive \
+    vlc 
 }
 
 setup::plugins() {
-  # Before we do anything, add github to known hosts
-
   local homeshick_root="$HOME/.homesick/repos/homeshick"
   homeshick_bin="$homeshick_root/bin/homeshick"
   setup::wait "Setting up Homeshick... " \
@@ -206,10 +222,12 @@ setup::asdf() {
   versions=$("$asdf" list-all nodejs 2>/dev/null)
   latest=$(echo "$versions" | setup::highest_version)
   setup::execute "$asdf" install nodejs "$latest"
+
+  rm "$asdf"
 }
 
 setup::services() {
-  console::info "Setting up Zsh, enabling Docker and gdm services...\n"
+  console::info "Setting up Zsh, enabling Docker and GDM... \n"
   # Set zsh as default
   setup::execute sudo chsh -s "/bin/zsh" "$USER" 
   # Enable docker
