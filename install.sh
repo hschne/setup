@@ -149,12 +149,10 @@ setup::plugins() {
   local tpm_root="$HOME/.tmux/plugins/tpm"
   setup::wait "Downloading Tmux plugin manager... "\
     setup::gclone "tmux-plugins/tpm" "$tpm_root"
-  tmux start-server
-  tmux new-session -d
-  setup::wait "Installing Tmux plugins..." \
-    setup::execute \
-    "$tpm_root/scripts/install_plugins.sh"
-  tmux kill-server
+  # TODO: This does not work. Make it work
+  # setup::wait "Installing Tmux plugins..." \
+  #   setup::execute \
+  #   "$tpm_root/scripts/install_plugins.sh"
 
 }
 
