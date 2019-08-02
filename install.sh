@@ -29,7 +29,8 @@ function main() {
 
   setup::services
 
-  console::summary
+  console::info "Installation finished successfully!\n"
+  console::break
 
   setup::reboot
 }
