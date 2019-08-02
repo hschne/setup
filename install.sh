@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
 source "lib/console.sh"
-source "lib/util.sh"
 source "lib/spinny.sh"
 
 ERROR=0
 DEBUG=0
 
-LOG_FILE=""
+LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
 
 set -oe pipefail
 
@@ -20,16 +19,21 @@ function main() {
 
   setup::basics
 
-  setup::ssh
+  # setup::github
 
-  setup::install_tools
+  setup::packages
 
-  setup::install_packages
+  setup::plugins
+
+  setup::asdf
+
+  setup::services
 
   console::summary
 
   setup::reboot
 }
+
 
 setup::request_sudo() {
   if ! sudo -n true >/dev/null 2>&1; then { 
@@ -37,9 +41,9 @@ setup::request_sudo() {
     sudo -p "" -v -n; console::break; 
   }; fi
 
-  # Keep-alive: update existing sudo time stamp until the script has finished
-  # See here: https://gist.github.com/cowboy/3118588
-  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+# Keep-alive: update existing sudo time stamp until the script has finished
+# See here: https://gist.github.com/cowboy/3118588
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
 setup::parse_arguments() {
@@ -69,11 +73,12 @@ setup::basics() {
     base-devel \
     git \
     curl \
+    wget \
     openssh \
     inetutils
 }
 
-setup::ssh() {
+setup::github() {
   mkdir "$HOME/.ssh"
 
   console::info "To continue we'll need to upload a SSH key to GitHub.\n"
@@ -82,7 +87,7 @@ setup::ssh() {
   console::break
   console::prompt "Enter your two-factor code: " && { local password; read -e -r -s otp; }
   console::break
-  
+
   console::info "Generating a new SSH key and uploading it to Github... "
   spinny::start
   setup::execute ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa"
@@ -107,98 +112,107 @@ setup::ssh() {
   ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 }
 
-setup::install_packages() {
+setup::packages() {
   setup::wait "Downloading Yay... " \
-    setup::gclone https://aur.archlinux.org/yay.git 
+    setup::execute git clone https://aur.archlinux.org/yay.git 
   cd yay
   setup::wait "Installing yay... " \
-    sudo makepkg -si --noconfirm 
+    makepkg -si --noconfirm 
   cd .. &&  rm -rf yay 
 
   setup::wait "Installing all the packages. This could take a while..." \
     setup::execute \
-    sudo yay -S --noconfirm \
+    yay -S --noconfirm \
+    alacritty \
+    chromium \
     dialog \
     diff-so-fancy \
-    zsh \
+    docker  \
+    docker-compose \
+    feh \
+    firefox-developer-edition \
+    gvim \
+    hub  \
+    i3-wm \
+    jetbrains-toolbox \
+    jsoncpp 
+    nerd-fonts-complete \
+    polybar \
+    pulseaudio \
+    rambox-bin \
     ripgrep \
-    # alacritty \
-  # chromium \
-  # docker  \
-  # docker-compose \
-  # feh \
-  # firefox-developer-edition \
-  # gvim \
-  # hub  \
-  # i3-wm \
-  # jsoncpp 
-  # nerd-fonts-complete \
-  # polybar \
-  # pulseaudio \
-  # rambox-bin \
-  # spotify \
-  # synology-cloud-station-drive \
-  # thefuck \
-  # tmux \
-  # ttf-font-awesome \
-  # ttf-material-icons-git \
-  # vlc \
+    spotify \
+    synology-cloud-station-drive \
+    thefuck \
+    tmux \
+    ttf-font-awesome \
+    ttf-material-icons-git \
+    vlc \
+    zsh 
 }
 
-# Wait executes a command and wraps it in a spinner.
-# 
-# Arguments:
-#
-# $1 - The URL to clone from.
-# $2 - The destination to clone to.
-#
-# Examples
-#
-#   gclone "http://someurl/myrepo.git" $HOME
-# 
-setup::wait() {
-  local message=$1
-  shift 
-
-  console::info "$message"
-  # When debugging is enabled command output is printed to tty
-  # and no progress thing is required, as that is visible anyway
-  if [[ $DEBUG -eq 0 ]]; then 
-    spinny::start
-    "$@"
-    result=$?
-    spinny:stop
-    if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" "red"; fi
-  else 
-    console::break
-    "$@"
-  fi
-}
-
-setup::install_tools() {
+setup::plugins() {
   # Before we do anything, add github to known hosts
 
   local homeshick_root="$HOME/.homesick/repos/homeshick"
   homeshick_bin="$homeshick_root/bin/homeshick"
-  setup::wait "Setting up Homeshick..." \
+  setup::wait "Setting up Homeshick... " \
     setup::gclone "andsens/homeshick" "$homeshick_root" 
-  setup::wait "Cloning your castles..."\
+  setup::wait "Cloning your castles... "\
     "${homeshick_bin}" clone --batch git@github.com:glumpat/dotfiles.git && \
-  setup::execute \
+    setup::execute \
     "${homeshick_bin}" link --force
 
-  local destination="$HOME/.zplug"
+  local zplug_root="$HOME/.zplug"
   setup::execute \
     chsh -s "/bin/zsh" "$USER" 
   setup::wait "Setting up zplug..."\
     setup::execute \
-    gclone "git@github.com:zplug/zplug.git" "$destination"
+    gclone "git@github.com:zplug/zplug.git" "$zplug_root"
 
-  setup::wait "Downloading Tmux plugin manager..."\
-    setup::gclone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  local tpm_root="$HOME/.tmux/plugins/tpm"
+  setup::wait "Downloading Tmux plugin manager... "\
+    setup::gclone tmux-plugins/tpm "$tpm_root"
   setup::wait "Installing Tmux plugins..." \
     setup::execute \
-    ~/.tmux/plugins/tpm/scripts/install_plugins.sh
+    "$tpm_root/scripts/install_plugins.sh"
+
+}
+
+setup::asdf() {
+  local asdf_root="$HOME/.asdf"
+  # setup::wait "Downloading asdf-vm... "\
+  #   setup::gclone "asdf-vm/asdf" "$asdf_root"
+  local asdf; asdf="$asdf_root/asdf"
+  # Create a temporary executable for use in subshells
+  cat "$asdf_root/asdf.sh" >> "$asdf" && echo "asdf \"\$@\"" >> "$asdf" && chmod +x "$asdf"
+  # "$asdf" plugin-add ruby
+  local latest
+  console::info "Installing the latest Ruby... "
+  setup::spinstart
+  latest=$("$asdf" list-all ruby 2>/dev/null | setup::highest_version)
+  setup::execute "$asdf" install ruby "$latest"
+  setup::spinstop $?
+
+  console::info "Installing the latest Python... "
+  setup::spinstart
+  latest=$("$asdf" list-all python 2>/dev/null | setup::highest_version)
+  setup::execute "$asdf" install python "$latest"
+  setup::spinstop $?
+
+  console::info "Installing the latest Node... "
+  setup::spinstart
+  latest=$("$asdf" list-all node 2>/dev/null | setup::highest_version)
+  setup::execute "$asdf" install node "$latest"
+  setup::spinstop $?
+}
+
+setup::services() {
+  # Enable docker
+  setup::execute sudo usermod -aG docker "$USER" 
+  setup::execute sudo systemctl enable docker
+  # Enable gdm
+  setup::execute sudo systemctl enable gdm
 }
 
 # Wait executes a command and wraps it in a spinner.
@@ -232,11 +246,25 @@ setup::wait() {
   fi
 }
 
+setup::spinstart() {
+  [[ $DEBUG -eq 0 ]] && spinny::start
+}
+
+setup::spinstop() {
+  result=$1
+  if [[ $DEBUG -eq 0 ]]; then 
+    spinny::stop
+    if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" "red"; fi
+  else 
+    console::break
+    "$@"
+  fi
+}
+
 setup::execute() {
   if [[ $DRY_RUN -eq 1 ]]; then
     console::debug "Skip execution of '$*' \n"; return 0
   fi
-  [[ ! -f "$LOG_FILE" ]] && LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
   if [[ $DEBUG -eq 1 ]]; then
     "$@" | tee -a "$LOG_FILE"
   else
@@ -307,21 +335,20 @@ setup::reboot() {
 setup::die(){
   local message=$1
   console::error "$message\n" && exit 1
+  spinny::stop 2>/dev/null
 }
 
-setup::handle_exit() {
+setup::handle_abort() {
   console::break
-  console::error "Installation aborted by user\n" 
-  exit 1
+  setup::die "Installation aborted by user\n" 
 }
 
 setup::handle_error() {
   console::break
-  console::error "Some setup steps failed. See '$LOG_FILE' for more information\n"
-  exit 1
+  setup::die "Some setup steps failed. See '$LOG_FILE' for more information\n"
 }
 
-trap 'setup::handle_exit $?' 2
+trap 'setup::handle_abort $?' SIGINT
 trap 'setup::handle_error $?' ERR
 
 # Entrypoint
