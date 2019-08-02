@@ -20,6 +20,10 @@ function main() {
   setup::basics
 
   setup::github
+  
+  setup::asdf
+  return
+
 
   setup::packages
 
@@ -166,22 +170,16 @@ setup::asdf() {
   "$asdf" plugin-add ruby
   local latest
   console::info "Installing the latest Ruby... "
-  setup::spinstart
-  latest=$("$asdf" list-all ruby 2>/dev/null | setup::highest_version)
+  latest=$("$asdf" list-all ruby | setup::highest_version)
   setup::execute "$asdf" install ruby "$latest"
-  setup::spinstop $?
 
   console::info "Installing the latest Python... "
-  setup::spinstart
   latest=$("$asdf" list-all python 2>/dev/null | setup::highest_version)
   setup::execute "$asdf" install python "$latest"
-  setup::spinstop $?
 
   console::info "Installing the latest Node... "
-  setup::spinstart
   latest=$("$asdf" list-all node 2>/dev/null | setup::highest_version)
   setup::execute "$asdf" install node "$latest"
-  setup::spinstop $?
 }
 
 setup::services() {
