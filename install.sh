@@ -167,19 +167,26 @@ setup::asdf() {
   local asdf; asdf="$asdf_root/asdf"
   # Create a temporary executable for use in subshells
   cat "$asdf_root/asdf.sh" >> "$asdf" && echo "asdf \"\$@\"" >> "$asdf" && chmod +x "$asdf"
-  "$asdf" plugin-add ruby
   local latest
+
   console::info "Installing the latest Ruby... "
-  latest=$("$asdf" list-all ruby | setup::highest_version)
+  setup::execute "$asdf" plugin-add ruby
+  versions=$("$asdf" list-all ruby 2>/dev/null)
+  latest=$(echo "$versions" | setup::highest_version)
   setup::execute "$asdf" install ruby "$latest"
 
   console::info "Installing the latest Python... "
-  latest=$("$asdf" list-all python 2>/dev/null | setup::highest_version)
+  setup::execute "$asdf" plugin-add python
+  versions=$("$asdf" list-all python 2>/dev/null)
+  latest=$(echo "$versions" | setup::highest_version)
   setup::execute "$asdf" install python "$latest"
 
   console::info "Installing the latest Node... "
-  latest=$("$asdf" list-all node 2>/dev/null | setup::highest_version)
-  setup::execute "$asdf" install node "$latest"
+  setup::execute "$asdf" plugin-add nodejs
+  setup::execute bash "$asdf_root/plugins/nodejs/bin/import-release-team-keyring"
+  versions=$("$asdf" list-all nodejs 2>/dev/null)
+  latest=$(echo "$versions" | setup::highest_version)
+  setup::execute "$asdf" install nodejs "$latest"
 }
 
 setup::services() {
