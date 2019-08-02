@@ -120,7 +120,7 @@ setup::packages() {
     setup::execute makepkg -si --noconfirm 
   cd .. &&  rm -rf yay 
 
-  setup::wait "Installing all the packages. This could take a while..." \
+  setup::wait "Installing all the packages. This could take a while... " \
     setup::execute \
     yay -S --noconfirm \
     alacritty \
@@ -209,6 +209,7 @@ setup::asdf() {
 }
 
 setup::services() {
+  console::info "Setting up Zsh, enabling Docker and gdm services...\n"
   # Set zsh as default
   setup::execute sudo chsh -s "/bin/zsh" "$USER" 
   # Enable docker
