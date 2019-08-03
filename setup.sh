@@ -210,12 +210,14 @@ setup::asdf() {
   versions=$("$asdf" list-all ruby 2>/dev/null)
   latest=$(echo "$versions" | setup::highest_version)
   setup::execute "$asdf" install ruby "$latest"
+  console::break
 
   console::info "Installing the latest Python... "
   setup::execute "$asdf" plugin-add python
   versions=$("$asdf" list-all python 2>/dev/null)
   latest=$(echo "$versions" | setup::highest_version)
   setup::execute "$asdf" install python "$latest"
+  console::break
 
   console::info "Installing the latest Node... "
   setup::execute "$asdf" plugin-add nodejs
@@ -223,6 +225,7 @@ setup::asdf() {
   versions=$("$asdf" list-all nodejs 2>/dev/null)
   latest=$(echo "$versions" | setup::highest_version)
   setup::execute "$asdf" install nodejs "$latest"
+  console::break
 
   rm "$asdf"
 }
