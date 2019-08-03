@@ -1,16 +1,31 @@
 # Setup
 
-Setup a place like home. Fully automated Antergos setup script. Install all the packages, and all the CLI tools.
+Setup a place like home. Fully automated arch setup script. Install all the packages, and all the CLI tools, everything.
 
-    git clone https://github.com/glumpat/setup.git && cd setup && ./install.sh
+## Requirements
 
-Have a look at the [script](install.sh) for more info.
+This setup does not configure Arch. Use a script like [archfi](https://github.com/MatMoul/archfi) for that. Once Arch is installed you need sudo, git and a user account: 
 
+```
+pacman -S sudo git
+useradd -m -o wheel -s /bin/bash <user>
+passwd <user>
+echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
+```
+
+Once that is done simply run: 
+
+```
+git clone https://github.com/glumpat/setup.git && cd setup && sudo ./setup.sh
+```
+
+Have a look at the [script](setup.sh) for more info.
 
 
 ## Development
 
-In order to test if your script you can utilize Docker with a custom imagge. Build it using
+### Testing 
+In order to test if your script you can utilize Docker with a custom image. Build it using
 
 ```
 docker build -t 'glumpat/setup-test' .
@@ -25,6 +40,14 @@ To execute the entire install script execute
 
 ```
 ./test/docker-install.sh --debug
+```
+
+### Deployment
+
+Run [gatsh](https://github.com/hschne/gatsh/tree/master) to create a new distribution: 
+
+```
+gatsh setup.sh >> dist/setup.sh
 ```
 
 

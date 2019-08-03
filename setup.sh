@@ -3,7 +3,6 @@
 source "lib/console.sh"
 source "lib/spinny.sh"
 
-ERROR=0
 DEBUG=0
 
 LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")

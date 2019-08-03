@@ -12,7 +12,7 @@ main() {
   docker run --rm -it \
     -v "$tmp_dir/setup":/home/glumpat \
     "glumpat/setup-test" \
-    bash -c  "cd /home/glumpat && ./install.sh $*"
+    bash -c  "cd /home/glumpat && ./setup.sh $*"
 }
 
 main "$@"
