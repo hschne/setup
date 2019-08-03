@@ -175,7 +175,8 @@ setup::plugins() {
   homeshick_bin="$homeshick_root/bin/homeshick"
   setup::wait "Setting up Homeshick... " \
     setup::gclone "andsens/homeshick" "$homeshick_root" 
-  setup::wait "Cloning your castles... "\
+  setup::wait "Cloning your castles... " \
+    setup::execute \
     "${homeshick_bin}" clone --batch git@github.com:glumpat/dotfiles.git && \
     setup::execute \
     "${homeshick_bin}" link --force
