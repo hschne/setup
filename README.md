@@ -8,12 +8,11 @@ This setup does not configure Arch. Use a script like [archfi](https://github.co
 
 ```
 pacman -S sudo git
-useradd -m -o wheel -s /bin/bash <user>
+useradd -m -g wheel -s /bin/bash <user>
 passwd <user>
-echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
 ```
 
-Once that is done simply run: 
+Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. Once that is done simply run: 
 
 ```
 git clone https://github.com/glumpat/setup.git && cd setup && sudo ./setup.sh
