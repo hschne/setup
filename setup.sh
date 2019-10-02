@@ -7,7 +7,7 @@ DEBUG=0
 
 LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
 
-set -oe pipefail
+set -o pipefail
 
 function main() {
   console::banner
@@ -123,12 +123,19 @@ setup::packages() {
   setup::wait "Installing desktop packages... " \
     setup::execute \
     yay -S --noconfirm \
+    compton \
+    dunst \
     feh \
-    gdm \
-    i3-wm \
+    gnome \
+    gnome-tweaks \
+    i3-gaps \
     jsoncpp \
+    lxappearance \
+    nordic-theme-git \
     polybar \
-    rofi 
+    rofi \
+    xorg-xprop \
+    zafiro-icon-theme 
 
   setup::wait "Installing fonts... " \
     setup::execute \
@@ -159,15 +166,36 @@ setup::packages() {
     firefox-developer-edition \
     jetbrains-toolbox 
 
-  setup::wait "Installing drivers, utilities and apps stuff... " \
+
+  setup::wait "Installing utilities and drivers... " \
     setup::execute \
     yay -S --noconfirm \
+    arandr \
+    ctags \
     dialog \
+    htop \
+    mesa \
+    neofetch \
+    network-manager-applet \
+    networkmanager \
+    pavucontrol \
     pulseaudio \
-    rambox-bin \
+    ranger \
+    redshift \
+    w3m \
+    xclip \
+    xournal \
+    xrandr 
+
+  setup::wait "Installing apps... " \
+    setup::execute \
+    yay -S --noconfirm \
     spotify \
+    station \
     synology-cloud-station-drive \
-    vlc 
+    vlc \
+    zathura \
+    zathura-pdf-mupdf 
 }
 
 setup::plugins() {
