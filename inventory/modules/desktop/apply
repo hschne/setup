@@ -1,0 +1,12 @@
+packages=(
+  compton 
+  dunst 
+  feh 
+  i3-gaps 
+  jsoncpp 
+  polybar 
+  rofi 
+  xorg-xprop 
+)
+
+yay -S --noconfirm ${packages[@]}

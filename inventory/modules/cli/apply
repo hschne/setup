@@ -1,0 +1,13 @@
+packages=(
+  alacritty 
+  diff-so-fancy 
+  fzf 
+  gvim 
+  hub 
+  ripgrep 
+  thefuck 
+  tmux 
+  zsh 
+  )
+
+yay -S --noconfirm ${packages[@]}

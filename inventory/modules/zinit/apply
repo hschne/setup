@@ -1,0 +1,3 @@
+mkdir -d $HOME/.zinit
+git clone https://github.com/zdharma/zinit.git $HOME/.zinit/bin
+
