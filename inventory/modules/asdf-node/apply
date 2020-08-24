@@ -1,0 +1,5 @@
+asdf plugin-add nodejs
+
+"$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
+asdf install nodejs $(asdf latest nodejs)
+

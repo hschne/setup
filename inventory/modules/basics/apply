@@ -1,0 +1,10 @@
+packages=(
+  base-devel
+  git
+  curl
+  wget
+  openssh
+  inetutils
+)
+
+sudo pacman -Sy --noconfirm  ${packges[@]}

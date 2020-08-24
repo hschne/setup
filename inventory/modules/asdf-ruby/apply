@@ -1,0 +1,2 @@
+asdf plugin-add ruby
+asdf install ruby $(asdf latest ruby)

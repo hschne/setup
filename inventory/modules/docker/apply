@@ -1,0 +1,5 @@
+yay -S --noconfirm docker
+
+usermod -aG docker hschne
+
+systemctl enable docker

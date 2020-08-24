@@ -1,0 +1,2 @@
+asdf plugin-add python
+asdf install python $(asdf latest python)

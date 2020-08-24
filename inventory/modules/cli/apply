@@ -6,8 +6,6 @@ packages=(
   hub 
   ripgrep 
   thefuck 
-  tmux 
-  zsh 
   )
 
 yay -S --noconfirm ${packages[@]}

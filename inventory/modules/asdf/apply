@@ -1,0 +1,4 @@
+asdf_root="$HOME/.asdf"
+
+git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
+
