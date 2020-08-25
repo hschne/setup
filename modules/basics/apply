@@ -1,1 +1,10 @@
-pacman -Sy --noconfirm  base-devel git curl wget openssh inetutils
+packages=(
+  base-devel
+  git
+  curl
+  wget
+  openssh
+  inetutils
+)
+
+pacman -Sy --noconfirm  ${packges[@]}
