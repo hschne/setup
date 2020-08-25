@@ -7,4 +7,4 @@ packages=(
   inetutils
 )
 
-sudo pacman -Sy --noconfirm  ${packges[@]}
+pacman -Sy --noconfirm  ${packges[@]}
