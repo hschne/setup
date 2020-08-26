@@ -178,7 +178,7 @@ setup::packages() {
     ranger \
     redshift \
     w3m \
-    xclip \
+    xsel \
     xournal \
     xrandr 
 
@@ -186,9 +186,9 @@ setup::packages() {
     setup::execute \
     yay -S --noconfirm \
     spotify \
-    station \
     synology-cloud-station-drive \
     vlc \
+    slack \
     zathura \
     zathura-pdf-mupdf 
 }
