@@ -1,7 +1,0 @@
-packages=(
-  nerd-fonts-complete 
-  ttf-font-awesome 
-  ttf-material-icons-git 
-  )
-
-yay -S --noconfirm ${packages[@]}

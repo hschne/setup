@@ -126,16 +126,11 @@ setup::packages() {
     compton \
     dunst \
     feh \
-    gnome \
-    gnome-tweaks \
     i3-gaps \
     jsoncpp \
-    lxappearance \
-    nordic-theme-git \
     polybar \
     rofi \
-    xorg-xprop \
-    zafiro-icon-theme 
+    xorg-xprop 
 
   setup::wait "Installing fonts... " \
     setup::execute \
@@ -209,10 +204,10 @@ setup::plugins() {
     setup::execute \
     "${homeshick_bin}" link --force
 
-  local zplug_root="$HOME/.zplug"
-  setup::wait "Setting up zplug..."\
+  mkdir -d "$HOME/.zinit"
+  setup::wait "Setting up zinit..."\
     setup::execute \
-    setup::gclone "zplug/zplug" "$zplug_root"
+    setup::gclone "zdharma/zinit" "$HOME/.zinit/bin"
 
   local tpm_root="$HOME/.tmux/plugins/tpm"
   setup::wait "Downloading Tmux plugin manager... "\
@@ -235,23 +230,20 @@ setup::asdf() {
 
   console::info "Installing the latest Ruby... "
   setup::execute "$asdf" plugin-add ruby
-  versions=$("$asdf" list-all ruby 2>/dev/null)
-  latest=$(echo "$versions" | setup::highest_version)
+  latest=$("$asdf" latest ruby)
   setup::execute "$asdf" install ruby "$latest"
   console::break
 
   console::info "Installing the latest Python... "
   setup::execute "$asdf" plugin-add python
-  versions=$("$asdf" list-all python 2>/dev/null)
-  latest=$(echo "$versions" | setup::highest_version)
+  latest=$("$asdf" latest python)
   setup::execute "$asdf" install python "$latest"
   console::break
 
   console::info "Installing the latest Node... "
   setup::execute "$asdf" plugin-add nodejs
   setup::execute bash "$asdf_root/plugins/nodejs/bin/import-release-team-keyring"
-  versions=$("$asdf" list-all nodejs 2>/dev/null)
-  latest=$(echo "$versions" | setup::highest_version)
+  latest=$("$asdf" latest nodejs )
   setup::execute "$asdf" install nodejs "$latest"
   console::break
 
@@ -348,33 +340,6 @@ setup::gclone() {
 
   setup::execute "${git}" clone --depth 1 "$source" "$destination"
 }
-
-# Returns the highest version from a list of version strings,
-# stripped of leading white space. 
-# Magic taken from: 
-#   https://stackoverflow.com/a/30183040/2553104
-#   https://stackoverflow.com/a/3232433
-# 
-# Arguments: 
-# 
-# $@ - A list of versions of the form x.x.x
-#
-# Examples
-#
-#    echo "1.2.3 3.4.2 5.0.1" | highest_version
-#
-setup::highest_version() {
-  # Magic comes from here: https://stackoverflow.com/a/30183040/2553104
-  awk -F '.' '
-  /^[[:space:]]*[0-9]+\.[0-9]+\.[0-9]+[[:space:]]*$/ {
-  if ( ($1 * 100 + $2) * 100 + $3 > Max ) {
-    Max = ($1 * 100 + $2) * 100 + $3
-    Version=$0
-  }
-}
-END { print Version }' | sed -e 's/^[[:space:]]*//'
-}
-
 
 # Reboot after prompting the user for it
 # Taken from https://unix.stackexchange.com/a/426189

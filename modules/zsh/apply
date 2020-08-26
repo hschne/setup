@@ -1,4 +1,0 @@
-yay -S --noconfirm zsh
-
-chash -s "/bin/zsh" "$USER"
-

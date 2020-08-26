@@ -1,3 +1,0 @@
-yay -S --noconfirm gdm
-
-systemctl enable gdm
