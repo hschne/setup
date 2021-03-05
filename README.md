@@ -12,9 +12,11 @@ useradd -m -g wheel -s /bin/bash <user>
 passwd <user>
 ```
 
-Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. Once that is done simply run: 
+Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. You will also need to set a variable `TOKEN` to your GitHub application token for this script.
+Once that is done run the script. 
 
 ```
+TOKEN=<your-app-token>
 git clone https://github.com/glumpat/setup.git && cd setup && sudo ./setup.sh
 ```
 
