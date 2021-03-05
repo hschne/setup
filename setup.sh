@@ -5,8 +5,6 @@ source "lib/spinny.sh"
 
 DEBUG=0
 
-LOG_FILE=$(mktemp "/tmp/setup_XXXXXX.log")
-
 set -o pipefail
 
 function main() {
@@ -16,17 +14,16 @@ function main() {
 
   setup::request_sudo "$@"
 
-  setup::basics
+  setup::github "$@"
 
-  setup::github
-  
-  setup::packages
-
-  setup::plugins
-
-  setup::asdf
-
-  setup::services
+  gist_location=https://gist.githubusercontent.com/hschne/2f079132060adf903abe3e2afdc2be96/raw/0be5a8359d2b5a18c90b6b83fa116f007bd763ae/Setup.md
+wget -O - -o /dev/null $gist_location | \
+  sed '/^#/d' | \ 
+  sed '/^```/d' | \ 
+  cat -s | \
+  head -n -5 > /tmp/setup.sh
+  chmod +x /tmp/setup.sh
+  /tmp/setup.sh
 
   console::info "Installation finished successfully!\n"
   console::break
@@ -66,37 +63,20 @@ setup::parse_arguments() {
   set -- "${positional[@]}" # restore positional parameters
 }
 
-setup::basics() {
-  setup::wait "Installing some basics, just a second... "\
-    setup::execute \
-    sudo pacman -Sy --noconfirm  \
-    base-devel \
-    git \
-    curl \
-    wget \
-    openssh \
-    inetutils
-}
-
 setup::github() {
   mkdir "$HOME/.ssh"
 
   console::info "To continue we'll need to upload a SSH key to GitHub.\n"
-  console::prompt "Enter your Github username: " && { local username; read -e -r username; }
-  console::prompt "Enter your password: " && { local password; read -e -r -s password; }
-  console::break
-  console::prompt "Enter your two-factor code: " && { local password; read -e -r -s otp; }
+  console::prompt "Enter the script personal access token: " && { local token; read -e -r token; }
   console::break
 
   console::info "Generating a new SSH key and uploading it to Github... "
   spinny::start
-  setup::execute ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa"
 
   local name; name="$USER@$(hostname)"
   local status; status=$(curl -o /dev/null \
     -s -w "%{http_code}\n" \
-    -u "$username:$password" \
-    --header "x-github-otp: $otp" \
+    -H "Authorization: token $token"
     --data "{\"title\":\"$name\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
     https://api.github.com/user/keys)
   spinny::stop
@@ -110,235 +90,6 @@ setup::github() {
   console::print " done\n" "green"
 
   ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
-}
-
-setup::packages() {
-  setup::wait "Downloading Yay... " \
-    setup::execute git clone https://aur.archlinux.org/yay.git 
-  cd yay
-  setup::wait "Installing Yay... " \
-    setup::execute makepkg -si --noconfirm 
-  cd .. &&  rm -rf yay 
-
-  setup::wait "Installing desktop packages... " \
-    setup::execute \
-    yay -S --noconfirm \
-    compton \
-    dunst \
-    feh \
-    i3-gaps \
-    jsoncpp \
-    polybar \
-    rofi \
-    xorg-xprop 
-
-  setup::wait "Installing fonts... " \
-    setup::execute \
-    yay -S --noconfirm \
-    nerd-fonts-complete \
-    ttf-font-awesome \
-    ttf-material-icons-git 
-
-  setup::wait "Installing CLI tools... " \
-    setup::execute \
-    yay -S --noconfirm \
-    alacritty \
-    diff-so-fancy \
-    fzf \
-    gvim \
-    hub \
-    ripgrep \
-    thefuck \
-    tmux \
-    zsh 
-
-  setup::wait "Installing browsers and dev tools... " \
-    setup::execute \
-    yay -S --noconfirm \
-    chromium \
-    docker \
-    docker-compose \
-    firefox-developer-edition \
-    jetbrains-toolbox 
-
-
-  setup::wait "Installing utilities and drivers... " \
-    setup::execute \
-    yay -S --noconfirm \
-    arandr \
-    ctags \
-    dialog \
-    htop \
-    mesa \
-    neofetch \
-    network-manager-applet \
-    networkmanager \
-    pavucontrol \
-    pulseaudio \
-    ranger \
-    redshift \
-    w3m \
-    xsel \
-    xournal \
-    xrandr 
-
-  setup::wait "Installing apps... " \
-    setup::execute \
-    yay -S --noconfirm \
-    spotify \
-    synology-cloud-station-drive \
-    vlc \
-    slack \
-    zathura \
-    zathura-pdf-mupdf 
-}
-
-setup::plugins() {
-  local homeshick_root="$HOME/.homesick/repos/homeshick"
-  homeshick_bin="$homeshick_root/bin/homeshick"
-  setup::wait "Setting up Homeshick... " \
-    setup::gclone "andsens/homeshick" "$homeshick_root" 
-  setup::wait "Cloning your castles... " \
-    setup::execute \
-    "${homeshick_bin}" clone --batch git@github.com:glumpat/dotfiles.git && \
-    setup::execute \
-    "${homeshick_bin}" link --force
-
-  mkdir -d "$HOME/.zinit"
-  setup::wait "Setting up zinit..."\
-    setup::execute \
-    setup::gclone "zdharma/zinit" "$HOME/.zinit/bin"
-
-  local tpm_root="$HOME/.tmux/plugins/tpm"
-  setup::wait "Downloading Tmux plugin manager... "\
-    setup::gclone "tmux-plugins/tpm" "$tpm_root"
-  # TODO: This does not work. Make it work
-  # setup::wait "Installing Tmux plugins..." \
-  #   setup::execute \
-  #   "$tpm_root/scripts/install_plugins.sh"
-
-}
-
-setup::asdf() {
-  local asdf_root="$HOME/.asdf"
-  setup::wait "Downloading asdf-vm... "\
-    setup::gclone "asdf-vm/asdf" "$asdf_root"
-  local asdf; asdf="$asdf_root/asdf"
-  # Create a temporary executable for use in subshells
-  cat "$asdf_root/asdf.sh" >> "$asdf" && echo "asdf \"\$@\"" >> "$asdf" && chmod +x "$asdf"
-  local latest
-
-  console::info "Installing the latest Ruby... "
-  setup::execute "$asdf" plugin-add ruby
-  latest=$("$asdf" latest ruby)
-  setup::execute "$asdf" install ruby "$latest"
-  console::break
-
-  console::info "Installing the latest Python... "
-  setup::execute "$asdf" plugin-add python
-  latest=$("$asdf" latest python)
-  setup::execute "$asdf" install python "$latest"
-  console::break
-
-  console::info "Installing the latest Node... "
-  setup::execute "$asdf" plugin-add nodejs
-  setup::execute bash "$asdf_root/plugins/nodejs/bin/import-release-team-keyring"
-  latest=$("$asdf" latest nodejs )
-  setup::execute "$asdf" install nodejs "$latest"
-  console::break
-
-  rm "$asdf"
-}
-
-setup::services() {
-  console::info "Setting up Zsh, enabling Docker and GDM... \n"
-  # Set zsh as default
-  setup::execute sudo chsh -s "/bin/zsh" "$USER" 
-  # Enable docker
-  setup::execute sudo usermod -aG docker "$USER" 
-  setup::execute sudo systemctl enable docker
-  # Enable gdm
-  setup::execute sudo systemctl enable gdm
-}
-
-# Wait executes a command and wraps it in a spinner.
-# 
-# Arguments:
-#
-# $1 - The URL to clone from.
-# $2 - The destination to clone to.
-#
-# Examples
-#
-#   gclone "http://someurl/myrepo.git" $HOME
-# 
-setup::wait() {
-  local message=$1
-  shift 
-
-  console::info "$message"
-  # When debugging is enabled command output is printed to tty
-  # and no progress thing is required, as that is visible anyway
-  if [[ $DEBUG -eq 0 ]]; then 
-    spinny::start
-    # TODO: Add call to setup::execute here, to get rid of some code duplication
-    "$@"
-    result=$?
-    spinny::stop
-    if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" red; fi
-  else 
-    console::break
-    "$@"
-  fi
-}
-
-setup::spinstart() {
-  [[ $DEBUG -eq 0 ]] && spinny::start
-}
-
-setup::spinstop() {
-  result=$1
-  if [[ $DEBUG -eq 0 ]]; then 
-    spinny::stop
-    if [[ $result -eq 0 ]]; then console::print " done\n" "green"; else  console::print " error\n" "red"; fi
-  else 
-    console::break
-    "$@"
-  fi
-}
-
-setup::execute() {
-  if [[ $DRY_RUN -eq 1 ]]; then
-    console::debug "Skip execution of '$*' \n"; return 0
-  fi
-  if [[ $DEBUG -eq 1 ]]; then
-    "$@" | tee -a "$LOG_FILE"
-  else
-    "$@" &>> "$LOG_FILE"
-  fi
-  local result=$?
-  return $result
-}
-
-# A wrapper around git clone. Does not rely on the path and clones with shallow 
-# in order to speed up process. 
-
-# Arguments:
-#
-# $1 - The URL to clone from.
-# $2 - The destination to clone to.
-#
-# Examples
-#
-#   gclone "http://someurl/myrepo.git" $HOME
-# 
-setup::gclone() {
-  local git="/usr/bin/git"
-  local source="git@github.com:$1.git"
-  local destination="$2"
-  [[ -z $destination ]] && destination="$HOME"
-
-  setup::execute "${git}" clone --depth 1 "$source" "$destination"
 }
 
 # Reboot after prompting the user for it
