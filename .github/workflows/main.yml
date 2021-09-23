@@ -17,6 +17,8 @@ jobs:
       run: |
          cat files/setup.md | sed -n '/^```/,/^```/ p' | sed '/^```/d' > files/setup.sh
          cat files/xps13-9343.md | sed -n '/^```/,/^```/ p' | sed '/^```/d' > files/xps13-9343.sh
+         sed -i '1s|^|#!/usr/bin/env bash\n|' files/setup.sh
+         sed -i '1s|^|#!/usr/bin/env bash\n|' files/xps13-9343.sh
 
     - name: Run ShellCheck
       uses: ludeeus/action-shellcheck@master
