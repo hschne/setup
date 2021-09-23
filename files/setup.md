@@ -72,7 +72,7 @@ yay -S --noconfirm \
 #### Starship Prompts
  
 ```
- curl -fsSL https://starship.rs/install.sh | bash
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 ```
 
 #### Browsers & Dev Tookls
