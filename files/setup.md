@@ -216,7 +216,7 @@ yay -S --noconfirm \
 ```bash
 mkdir ~/Downloads && cd ~/Downloads
 yay --getpkgbuild nerd-fonts-complete && cd nerd-fonts-complete
-wget -O nerd-fonts-2.1.0.tar.gz https://github.com/ryanoasis/nerd-fonts/archive/v2.1.0.tar.gz
+curl https://github.com/ryanoasis/nerd-fonts/archive/v2.1.0.tar.gz -o nerd-fonts-2.1.0.tar.gz 
 makepkg -sci BUILDDIR=.
 ```
 
@@ -224,12 +224,12 @@ makepkg -sci BUILDDIR=.
 
 ```
 mkdir -p ~/Pictures/Backgrounds
-wget -O ~/Pictures/Backgrounds/forest.jpg https://i.imgur.com/lhZoAOv.jpg
-wget -O ~/Pictures/Backgrounds/mountains.jpg https://i.imgur.com/zuNUJ4J.jpg
-wget -O ~/Pictures/Backgrounds/moss.jpg https://i.imgur.com/kTNHsRt.jpg
-wget -O ~/Pictures/Backgrounds/cliff.jpg https://i.imgur.com/hdXF561.jpg
-wget -O ~/Pictures/Backgrounds/mountainlake.jpg https://i.imgur.com/ymmraHp.jpg
-wget -O ~/Pictures/Backgrounds/autumn.jpg https://i.imgur.com/f5YDfNq.jpg
-wget -O ~/Pictures/Backgrounds/tundra.jpg https://i.imgur.com/g9h0kkl.jpg
+curl https://i.imgur.com/lhZoAOv.jpg -o ~/Pictures/Backgrounds/forest.jpg 
+curl https://i.imgur.com/zuNUJ4J.jpg -o ~/Pictures/Backgrounds/mountains.jpg 
+curl https://i.imgur.com/kTNHsRt.jpg -o ~/Pictures/Backgrounds/moss.jpg 
+curl https://i.imgur.com/hdXF561.jpg -o ~/Pictures/Backgrounds/cliff.jpg 
+curl https://i.imgur.com/ymmraHp.jpg -o ~/Pictures/Backgrounds/mountainlake.jpg
+curl https://i.imgur.com/f5YDfNq.jpg -o ~/Pictures/Backgrounds/autumn.jpg 
+curl https://i.imgur.com/g9h0kkl.jpg -o ~/Pictures/Backgrounds/tundra.jpg 
 betterlockscreen -u ~/Pictures/Backgrounds
 ```
