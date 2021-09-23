@@ -23,6 +23,7 @@ jobs:
       with:
         severity: error
         scandir: './files'
+      env:
         SHELLCHECK_OPTS: -s bash
 
   dist:
