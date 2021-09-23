@@ -36,8 +36,8 @@ makepkg -si --noconfirm
 ```bash
 yay -S --noconfirm \
     betterlockscreen \
-    compton \ 
-    dunst \ 
+    compton \
+    dunst \<
     feh \
     gnome \
     gnome-tweaks \
@@ -46,7 +46,7 @@ yay -S --noconfirm \
     polybar \
     rofi \
     xorg-xinit\
-    xorg-xprop \ 
+    xorg-xprop \
     lxappearance \
     nordic-theme-git 
 ```
