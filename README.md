@@ -12,17 +12,21 @@ useradd -m -g wheel -s /bin/bash <user>
 passwd <user>
 ```
 
-Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. You will also need to set a variable `TOKEN` to your GitHub application token for this script.
-Once that is done run the script. 
+Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. You will also need to set a variable `TOKEN` to your GitHub application token for this script. You can set your token and test it by running: 
 
 ```
 TOKEN=<your-app-token>
+curl -H "Authorization: token $TOKEN" https://api.github.com/user
+```
+
+Once that is done run the script. 
+
+```
 curl -LO https://raw.githubusercontent.com/glumpat/setup/master/dist/setup.sh
 chmod +x setup.sh && sudo ./setup.sh
 ```
 
 Have a look at the [script](setup.sh) for more info.
-
 
 ## Development
 
