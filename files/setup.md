@@ -1,23 +1,19 @@
-# Setting up Arch
+# Setup
 
-## Installation
-
-## Setup
-
-#### Basics
+## Basics
 
 ```bash
 sudo pacman -Sy --noconfirm base-devel git curl openssh inetutils
 ```
 
-#### SSH Key
+## SSH Key
 
 ```bash
 ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa" <<< $'\ny'
 ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 ```
 
-#### Setup Yay
+## Setup Yay
 
 ```bash
 git clone https://aur.archlinux.org/yay.git 
@@ -25,7 +21,7 @@ cd yay
 makepkg -si --noconfirm 
 ```
 
-#### Desktop
+## Desktop
 
 ```bash
 yes | yay -S --noconfirm \
@@ -45,7 +41,7 @@ yes | yay -S --noconfirm \
     nordic-theme-git 
 ```
  
-#### CLI
+## CLI
 
 ```bash
 yes | yay -S --noconfirm \
@@ -62,13 +58,13 @@ yes | yay -S --noconfirm \
     zsh
 ```
  
-#### Starship Prompts
+## Starship Prompts
  
 ```
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 ```
 
-#### Browsers & Dev Tookls
+## Browsers & Dev Tookls
 
 ```bash
 yes | yay -S --noconfirm \
@@ -79,7 +75,7 @@ yes | yay -S --noconfirm \
     jetbrains-toolbox 
 ```
 
-#### Utilities & Drivers
+## Utilities & Drivers
 
 ```bash
 yes | yay -S \
@@ -110,7 +106,7 @@ yes | yay -S \
 sudo systemctl enable NetworkManager.service
 ```
 
-#### Random Apps
+## Random Apps
 
 ```bash
 yes | yay -S --noconfirm \
@@ -126,7 +122,7 @@ yes | yay -S --noconfirm \
     zathura-pdf-mupdf 
 ```
 
-#### Homeshick
+## Homeshick
 
 ```bash
 homeshick_root="$HOME/.homesick/repos/homeshick"
@@ -138,7 +134,7 @@ git clone git@github.com:andsens/homeshick.git "$homeshick_root"
 "${homeshick_bin}" link --force
 ```
 
-#### ZSH
+## ZSH
 
 ```bash
 sudo chsh -s "/bin/zsh" "$USER" 
@@ -151,7 +147,7 @@ mkdir $HOME/.zinit
 git clone https://github.com/zdharma/zinit.git $HOME/.zinit/bin
 ```
 
-#### TPM
+## TPM
 
 ```bash
 tpm_root="$HOME/.tmux/plugins/tpm"
@@ -159,7 +155,7 @@ git clone git@github.com:tmux-plugins/tpm.git  "$tpm_root"
 "$tpm_root/scripts/install_plugins.sh"
 ```
 
-#### ASDF
+## ASDF
 
 ```bash
 asdf_root="$HOME/.asdf"
@@ -167,7 +163,7 @@ asdf_root="$HOME/.asdf"
 git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
 ```
 
-#### asdf-ruby / asdf-node / asdf-python
+## asdf-ruby / asdf-node / asdf-python
 
 ```bash
 export PATH="$HOME/.asdf/bin/asdf:$PATH"
@@ -183,20 +179,20 @@ asdf plugin-add nodejs
 ~/.asdf/bin/asdf install nodejs $(asdf latest nodejs)
 ```
 
-#### GDM
+## GDM
 
 ```bash
 sudo systemctl enable gdm
 ```
 
-#### Docker
+## Docker
 
 ```bash
 sudo usermod -aG docker "$USER" 
 sudo systemctl enable docker
 ```
 
-#### Fonts
+## Fonts
 
 ```bash
 yay -S --noconfirm \
@@ -204,12 +200,12 @@ yay -S --noconfirm \
     ttf-material-icons-git 
 ```
 
-#### Nerd Fonts
+## Nerd Fonts
 
 ```bash
 mkdir ~/Downloads && cd ~/Downloads
 yay --getpkgbuild nerd-fonts-complete && cd nerd-fonts-complete
-curl https://github.com/ryanoasis/nerd-fonts/archive/v2.1.0.tar.gz -o nerd-fonts-2.1.0.tar.gz 
+curl -L --progress-bar https://github.com/ryanoasis/nerd-fonts/archive/v2.1.0.tar.gz -o nerd-fonts-2.1.0.tar.gz 
 makepkg -sci BUILDDIR=.
 ```
 
@@ -248,4 +244,3 @@ yay -S ecryptfs-utils rsync lsof
 sudo modprobe ecryptfs
 sudo echo 'ecryptfs' > /etc/modules-load.d/ecryptfs.conf
 ```
-
