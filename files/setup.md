@@ -13,7 +13,7 @@ sudo pacman -Sy --noconfirm base-devel git curl openssh inetutils
 #### Github
 
 ```bash
-ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa"
+ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa" <<< $'\ny'
 curl -o /dev/null \
     -s -w "%{http_code}\n" \
     -H "Authorization: token $TOKEN"
