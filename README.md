@@ -1,5 +1,7 @@
 # Setup
 
+[![Main](https://github.com/glumpat/setup/actions/workflows/main.yml/badge.svg)](https://github.com/glumpat/setup/actions/workflows/main.yml)
+
 Setup a place like home. Fully automated arch setup script based on [this gist](https://gist.github.com/hschne/2f079132060adf903abe3e2afdc2be96). Install all the packages, and all the CLI tools, everything.
 
 ## Requirements
