@@ -1,0 +1,29 @@
+
+
+name: Main 
+
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  dist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download Gatsh
+        run: wget https://raw.githubusercontent.com/hschne/gatsh/master/gatsh && chmod +x gatsh
+
+      - name: Build Dist
+        run: |
+          gatsh setup.sh > dist/setup.sh
+
+      - name: Commit Updated Files 📤
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: "['dist/setup.sh']"
+          message: "Update dist"
