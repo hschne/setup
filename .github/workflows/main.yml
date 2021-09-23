@@ -23,6 +23,7 @@ jobs:
       with:
         severity: error
         scandir: './files'
+        SHELLCHECK_OPTS: -s bash
 
   dist:
     name: Create Distribution
