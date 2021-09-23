@@ -88,6 +88,7 @@ yes | yay -S \
     neofetch \
     network-manager-applet \
     networkmanager \
+    pavucontrol \
     pipewire \
     pipewire-pulse \
     gst-plugin-pipewire \
