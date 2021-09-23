@@ -80,7 +80,7 @@ function main() {
 
   file_location=https://raw.githubusercontent.com/glumpat/setup/master/files/setup.md
   # Extract all fenced code blocks from the gist 
-  wget -O - -o /dev/null $file_location | sed -n '/^```/,/^```/ p' | sed '/^```/d' | cat -s | bash
+  curl -s $file_location | sed -n '/^```/,/^```/ p' | sed '/^```/d' | cat -s | bash
 
   console::info "Installation finished successfully!\n"
   console::break
