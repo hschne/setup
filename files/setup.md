@@ -15,7 +15,9 @@ sudo pacman -Sy --noconfirm base-devel git curl openssh inetutils
 ```bash
 ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa" <<< $'\ny'
 curl -o /dev/null \
+    -X POST \
     -s -w "%{http_code}\n" \
+    -H "Accept: application/vnd.github.v3+json" \
     -H "Authorization: token $TOKEN" \
     --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
     https://api.github.com/user/keys
