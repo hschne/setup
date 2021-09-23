@@ -12,6 +12,7 @@ This setup does not configure Arch. Use a script like [archfi](https://github.co
 pacman -S sudo git
 useradd -m -g wheel -s /bin/bash <user>
 passwd <user>
+su <user>
 ```
 
 Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. You will also need to set a variable `TOKEN` to your GitHub application token for this script. You can set your token and test it by running: 
@@ -24,10 +25,10 @@ curl -H "Authorization: token $TOKEN" https://api.github.com/user
 Once that is done run the script:
 
 ```bash
-curl https://raw.githubusercontent.com/glumpat/setup/master/dist/setup.sh | sudo bash
+curl https://raw.githubusercontent.com/glumpat/setup/master/dist/setup.sh |  bash
 # Alternatively, download and execute explictly
 curl -LO https://raw.githubusercontent.com/glumpat/setup/master/dist/setup.sh
-chmod +x setup.sh && sudo ./setup.sh
+chmod +x setup.sh && ./setup.sh
 ```
 
 Have a look at the [script](setup.sh) for more info.
