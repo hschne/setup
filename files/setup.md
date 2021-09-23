@@ -193,6 +193,31 @@ sudo usermod -aG docker "$USER"
 sudo systemctl enable docker
 ```
 
+## Syncthing
+
+
+```bash
+sudo cat << EOF > /etc/systemd/system/syncthing@.service
+[Unit]
+Description=Syncthing - Open Source Continuous File Synchronization for %I
+Documentation=man:syncthing(1)
+After=network.target
+
+[Service]
+User=%i
+ExecStart=/usr/bin/syncthing -no-browser -gui-address="0.0.0.0:8384" -no-restart -logflags=0
+Restart=on-failure
+SuccessExitStatus=3 4
+RestartForceExitStatus=3 4
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable syncthing@$USER.service
+```
+
 ## Fonts
 
 ```bash
