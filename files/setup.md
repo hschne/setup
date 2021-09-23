@@ -101,7 +101,7 @@ yay -S --noconfirm \
     networkmanager \
     pipewire \
     pipewire-pulse \
-    pipewire-gst-plugin-pipewire \
+    gst-plugin-pipewire \
     ranger \
     redshift \
     reflector \
