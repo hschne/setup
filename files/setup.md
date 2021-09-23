@@ -161,7 +161,7 @@ git clone https://github.com/zdharma/zinit.git $HOME/.zinit/bin
 #### TPM
 
 ```bash
-local tpm_root="$HOME/.tmux/plugins/tpm"
+tpm_root="$HOME/.tmux/plugins/tpm"
 git clone git@github.com:tmux-plugins/tpm.git  "$tpm_root"
 "$tpm_root/scripts/install_plugins.sh"
 ```
