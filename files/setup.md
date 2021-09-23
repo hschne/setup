@@ -238,3 +238,14 @@ curl -o /dev/null \
     --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
     https://api.github.com/user/keys
 ```
+
+### Encryption
+
+See [this article](https://www.raeder.technology/post/encrypt-home-directory) for details.
+
+```bash
+yay -S ecryptfs-utils rsync lsof
+sudo modprobe ecryptfs
+sudo echo 'ecryptfs' > /etc/modules-load.d/ecryptfs.conf
+```
+
