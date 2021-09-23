@@ -38,7 +38,7 @@ makepkg -si --noconfirm
 yay -S --noconfirm \
     betterlockscreen \
     compton \
-    dunst \<
+    dunst \
     feh \
     gnome \
     gnome-tweaks \
