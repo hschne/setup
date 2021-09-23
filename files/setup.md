@@ -28,6 +28,7 @@ ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 
 ```bash
 git clone https://aur.archlinux.org/yay.git 
+cd yay
 makepkg -si --noconfirm 
 ```
 
