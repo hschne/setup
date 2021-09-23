@@ -2,8 +2,6 @@
 
 source "lib/console.sh"
 
-DEBUG=0
-
 set -o pipefail
 
 function main() {
@@ -11,13 +9,9 @@ function main() {
 
   setup::request_sudo "$@"
 
-  gist_location=https://gist.githubusercontent.com/hschne/2f079132060adf903abe3e2afdc2be96/raw/0be5a8359d2b5a18c90b6b83fa116f007bd763ae/Setup.md
-wget -O - -o /dev/null $gist_location | \
-  sed '/^#/d' | \ 
-  sed '/^```/d' | \ 
-  cat -s | \
-  head -n -5 | \
-  bash
+  gist_location=https://gist.githubusercontent.com/hschne/2f079132060adf903abe3e2afdc2be96/raw/Setup.md
+  # Extract all fenced code blocks from the gist 
+  wget -O - -o /dev/null $gist_location | sed -n '/^```/,/^```/ p' | sed '/^```/d' | cat -s | bash
 
   console::info "Installation finished successfully!\n"
   console::break
