@@ -177,16 +177,17 @@ git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
 #### asdf-ruby / asdf-node / asdf-python
 
 ```bash
+asdf=~/.asdf/bin/asdf
 # Ruby
-~/.asdf/bin/asdf plugin-add ruby
-~/.asdf/bin/asdf install ruby $(asdf latest ruby)
+$asdf plugin-add ruby
+$asdf install ruby $($asdf latest ruby)
 # Python
-~/.asdf/bin/asdf plugin-add python
-~/.asdf/bin/asdf install python $(asdf latest python)
+$asdf plugin-add python
+$asdf install python $($asdf latest python)
 # Node
-~/.asdf/bin/asdf plugin-add nodejs
+$asdf plugin-add nodejs
 "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
-~/.asdf/bin/asdf install nodejs $(asdf latest nodejs)
+~/.asdf/bin/asdf install nodejs $($asdf latest nodejs)
 ```
 
 #### GDM
