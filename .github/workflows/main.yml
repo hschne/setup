@@ -19,8 +19,7 @@ jobs:
         run: wget https://raw.githubusercontent.com/hschne/gatsh/master/gatsh && chmod +x gatsh
 
       - name: Build Dist
-        run: |
-          gatsh setup.sh > dist/setup.sh
+        run: ./gatsh setup.sh > dist/setup.sh
 
       - name: Commit Updated Files 📤
         uses: EndBug/add-and-commit@v7
