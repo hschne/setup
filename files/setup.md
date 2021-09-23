@@ -10,17 +10,10 @@
 sudo pacman -Sy --noconfirm base-devel git curl openssh inetutils
 ```
 
-#### Github
+#### SSH Key
 
 ```bash
 ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa" <<< $'\ny'
-curl -o /dev/null \
-    -X POST \
-    -s -w "%{http_code}\n" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -H "Authorization: token $TOKEN" \
-    --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
-    https://api.github.com/user/keys
 ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 ```
 
@@ -177,16 +170,17 @@ git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
 #### asdf-ruby / asdf-node / asdf-python
 
 ```bash
+export PATH="$HOME/.asdf/bin/asdf:$PATH"
 # Ruby
-~/.asdf/bin/asdf plugin-add ruby
-~/.asdf/bin/asdf install ruby $(~/.asdf/bin/asdf latest ruby)
+asdf plugin-add ruby
+asdf install ruby $(asdf latest ruby)
 # Python
-~/.asdf/bin/asdf plugin-add python
-~/.asdf/bin/asdf install python $(~/.asdf/bin/asdf latest python)
+asdf plugin-add python
+asdf install python $(asdf latest python)
 # Node
-~/.asdf/bin/asdf plugin-add nodejs
+asdf plugin-add nodejs
 "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
-~/.asdf/bin/asdf install nodejs $(~/.asdf/bin/asdf latest nodejs)
+~/.asdf/bin/asdf install nodejs $(asdf latest nodejs)
 ```
 
 #### GDM
@@ -201,7 +195,6 @@ sudo systemctl enable gdm
 sudo usermod -aG docker "$USER" 
 sudo systemctl enable docker
 ```
-
 
 #### Fonts
 
@@ -232,4 +225,16 @@ curl https://i.imgur.com/ymmraHp.jpg -o ~/Pictures/Backgrounds/mountainlake.jpg
 curl https://i.imgur.com/f5YDfNq.jpg -o ~/Pictures/Backgrounds/autumn.jpg 
 curl https://i.imgur.com/g9h0kkl.jpg -o ~/Pictures/Backgrounds/tundra.jpg 
 betterlockscreen -u ~/Pictures/Backgrounds
+```
+
+#### GitHub
+
+```bash
+curl -o /dev/null \
+    -X POST \
+    -s -w "%{http_code}\n" \
+    -H "Accept: application/vnd.github.v3+json" \
+    -H "Authorization: token $TOKEN" \
+    --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
+    https://api.github.com/user/keys
 ```
