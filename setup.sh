@@ -9,9 +9,9 @@ function main() {
 
   setup::request_sudo "$@"
 
-  gist_location=https://gist.githubusercontent.com/hschne/2f079132060adf903abe3e2afdc2be96/raw/Setup.md
+  file_location=https://raw.githubusercontent.com/glumpat/setup/master/files/setup.md
   # Extract all fenced code blocks from the gist 
-  wget -O - -o /dev/null $gist_location | sed -n '/^```/,/^```/ p' | sed '/^```/d' | cat -s | bash
+  wget -O - -o /dev/null $file_location | sed -n '/^```/,/^```/ p' | sed '/^```/d' | cat -s | bash
 
   console::info "Installation finished successfully!\n"
   console::break
