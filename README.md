@@ -17,7 +17,8 @@ Once that is done run the script.
 
 ```
 TOKEN=<your-app-token>
-git clone https://github.com/glumpat/setup.git && cd setup && sudo ./setup.sh
+curl -LO https://raw.githubusercontent.com/glumpat/setup/master/dist/setup.sh
+chmod +x setup.sh && sudo ./setup.sh
 ```
 
 Have a look at the [script](setup.sh) for more info.
