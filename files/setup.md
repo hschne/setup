@@ -99,7 +99,6 @@ yay -S --noconfirm \
     neofetch \
     network-manager-applet \
     networkmanager \
-    pavucontrol \
     pipewire \
     pipewire-pulse \
     pipewire-gst-plugin-pipewire \
