@@ -16,7 +16,7 @@ sudo pacman -Sy --noconfirm base-devel git curl openssh inetutils
 ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa" <<< $'\ny'
 curl -o /dev/null \
     -s -w "%{http_code}\n" \
-    -H "Authorization: token $TOKEN"
+    -H "Authorization: token $TOKEN" \
     --data "{\"title\":\"$USER@$(hostname)"\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
     https://api.github.com/user/keys
 ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
