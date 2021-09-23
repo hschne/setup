@@ -33,6 +33,8 @@ Have a look at the [script](setup.sh) for more info.
 
 ## Development
 
+To modify which packages get installed edit [setup.md](files/setup.md). 
+
 ### Testing 
 In order to test if your script you can utilize Docker with a custom image. Build it using
 
