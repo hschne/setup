@@ -19,12 +19,11 @@ TOKEN=<your-app-token>
 curl -H "Authorization: token $TOKEN" https://api.github.com/user
 ```
 
-Once that is done run the script. 
+Once that is done run the script:
 
-```
-# Oneliner
+```bash
 curl https://raw.githubusercontent.com/glumpat/setup/master/dist/setup.sh | sudo bash
-# Or download and execute explictly
+# Alternatively, download and execute explictly
 curl -LO https://raw.githubusercontent.com/glumpat/setup/master/dist/setup.sh
 chmod +x setup.sh && sudo ./setup.sh
 ```
