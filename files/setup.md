@@ -44,7 +44,7 @@ yay -S --noconfirm \
 ## CLI
 
 ```bash
-yay -R vim
+yay -R vim --noconfirm
 yay -S --noconfirm \
     alacritty \
     diff-so-fancy \
@@ -79,7 +79,7 @@ yay -S --noconfirm \
 ## Utilities & Drivers
 
 ```bash
-yay -R pulseaudio
+yay -R pulseaudio --noconfirm
 yay -S --noconfirm \
     arandr \
     ctags \
