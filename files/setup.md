@@ -232,6 +232,7 @@ yay -S --noconfirm \
 
 ```bash
 mkdir ~/Downloads && cd ~/Downloads
+yay -S --noconfirm xorg-mkfontscale xorg-bdftopcf xorg-font-util 
 yay --getpkgbuild nerd-fonts-complete && cd nerd-fonts-complete
 curl -L --progress-bar https://github.com/ryanoasis/nerd-fonts/archive/v2.1.0.tar.gz -o nerd-fonts-2.1.0.tar.gz 
 makepkg -sci BUILDDIR=.
@@ -268,7 +269,7 @@ curl -o /dev/null \
 See [this article](https://www.raeder.technology/post/encrypt-home-directory) for details.
 
 ```bash
-yay -S ecryptfs-utils rsync lsof
+yay -S --noconfirm ecryptfs-utils rsync lsof
 sudo modprobe ecryptfs
 sudo echo 'ecryptfs' > /etc/modules-load.d/ecryptfs.conf
 ```
