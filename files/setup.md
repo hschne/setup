@@ -24,7 +24,7 @@ makepkg -si --noconfirm
 ## Desktop
 
 ```bash
-yes | yay -S --noconfirm \
+yay -S --noconfirm \
     betterlockscreen \
     compton \
     dunst \
@@ -44,7 +44,8 @@ yes | yay -S --noconfirm \
 ## CLI
 
 ```bash
-yes | yay -S --noconfirm \
+yay -R vim
+yay -S --noconfirm \
     alacritty \
     diff-so-fancy \
     fzf \
@@ -67,7 +68,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 ## Browsers & Dev Tookls
 
 ```bash
-yes | yay -S --noconfirm \
+yay -S --noconfirm \
     chromium \
     docker \
     docker-compose \
@@ -78,7 +79,8 @@ yes | yay -S --noconfirm \
 ## Utilities & Drivers
 
 ```bash
-yes | yay -S \
+yay -R pulseaudio
+yay -S --noconfirm \
     arandr \
     ctags \
     dialog \
@@ -110,7 +112,7 @@ sudo systemctl enable NetworkManager.service
 ## Random Apps
 
 ```bash
-yes | yay -S --noconfirm \
+yay -S --noconfirm \
     gimp \
     inkscape \
     speedcrunch \
