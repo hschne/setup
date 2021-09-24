@@ -71,7 +71,7 @@ console::color() {
   printf "%b\n" "${colors[$color]}"
 }
 
-set -eo pipefail
+set -o pipefail
 
 function main() {
   console::banner
