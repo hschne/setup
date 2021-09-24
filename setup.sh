@@ -2,7 +2,7 @@
 
 source "lib/console.sh"
 
-set -eo pipefail
+set -o pipefail
 
 function main() {
   console::banner
