@@ -21,9 +21,9 @@ function main() {
 
 
 setup::request_sudo() {
-  if ! sudo -n true >/dev/null 2>&1; then { 
+  if [ $EUID != 0 ]; then
     console::prompt "This script requires sudo access. Please enter your password: ";
-    sudo -p "" -v -n; console::break; 
+    sudo -v; console::break; 
   }; fi
 
   # Keep-alive: update existing sudo time stamp until the script has finished
