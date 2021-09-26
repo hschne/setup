@@ -13,6 +13,18 @@ ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa" <<< $'\ny'
 ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 ```
 
+## GitHub
+
+```bash
+curl -o /dev/null \
+    -X POST \
+    -s -w "%{http_code}\n" \
+    -H "Accept: application/vnd.github.v3+json" \
+    -H "Authorization: token $TOKEN" \
+    --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
+    https://api.github.com/user/keys
+```
+
 ## Setup Yay
 
 ```bash
@@ -225,18 +237,6 @@ curl https://i.imgur.com/ymmraHp.jpg -o ~/Pictures/Backgrounds/mountainlake.jpg
 curl https://i.imgur.com/f5YDfNq.jpg -o ~/Pictures/Backgrounds/autumn.jpg 
 curl https://i.imgur.com/g9h0kkl.jpg -o ~/Pictures/Backgrounds/tundra.jpg 
 betterlockscreen -u ~/Pictures/Backgrounds
-```
-
-#### GitHub
-
-```bash
-curl -o /dev/null \
-    -X POST \
-    -s -w "%{http_code}\n" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -H "Authorization: token $TOKEN" \
-    --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
-    https://api.github.com/user/keys
 ```
 
 ### Encryption
