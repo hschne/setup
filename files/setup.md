@@ -47,6 +47,8 @@ yay -S --noconfirm \
     jsoncpp \
     polybar \
     rofi \
+    rofimoji \
+    xdotool \
     xorg-xinit\
     xorg-xprop \
     lxappearance \
