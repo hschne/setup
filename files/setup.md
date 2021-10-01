@@ -127,6 +127,7 @@ sudo systemctl enable NetworkManager.service
 
 ```bash
 yay -S --noconfirm \
+    calibre \
     gimp \
     inkscape \
     speedcrunch \
