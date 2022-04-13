@@ -158,13 +158,6 @@ git clone git@github.com:andsens/homeshick.git "$homeshick_root"
 sudo chsh -s "/bin/zsh" "$USER" 
 ```
 
-#### Zinit
-
-```bash
-mkdir $HOME/.zinit
-git clone https://github.com/zdharma/zinit.git $HOME/.zinit/bin
-```
-
 ## TPM
 
 ```bash
@@ -240,14 +233,4 @@ curl https://i.imgur.com/ymmraHp.jpg -o ~/Pictures/Backgrounds/mountainlake.jpg
 curl https://i.imgur.com/f5YDfNq.jpg -o ~/Pictures/Backgrounds/autumn.jpg 
 curl https://i.imgur.com/g9h0kkl.jpg -o ~/Pictures/Backgrounds/tundra.jpg 
 betterlockscreen -u ~/Pictures/Backgrounds
-```
-
-### Encryption
-
-See [this article](https://www.raeder.technology/post/encrypt-home-directory) for details.
-
-```bash
-yay -S --noconfirm ecryptfs-utils rsync lsof
-sudo modprobe ecryptfs
-sudo echo 'ecryptfs' > /etc/modules-load.d/ecryptfs.conf
 ```
