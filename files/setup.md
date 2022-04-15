@@ -99,6 +99,7 @@ yay -S --noconfirm \
     arandr \
     ctags \
     dialog \
+    gzip \
     easyeffects \
     htop \
     mesa \
