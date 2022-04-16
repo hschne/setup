@@ -94,12 +94,11 @@ yay -S --noconfirm \
 ## Utilities & Drivers
 
 ```bash
-yay -R pulseaudio --noconfirm
+yay -S --noconfirm pipewire
 yay -S --noconfirm \
     arandr \
     ctags \
     dialog \
-    7z \
     gzip \
     easyeffects \
     htop \
@@ -111,6 +110,7 @@ yay -S --noconfirm \
     pipewire \
     pipewire-pulse \
     gst-plugin-pipewire \
+    p7zip \
     ranger \
     redshift \
     reflector \
