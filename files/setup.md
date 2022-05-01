@@ -39,13 +39,13 @@ makepkg -si --noconfirm
 yay -S --noconfirm \
     arandr \
     betterlockscreen \
-    compton \
     dunst \
     feh \
     gnome \
     gnome-tweaks \
     i3-gaps \
     jsoncpp \
+    picom \
     polybar \
     rofi \
     rofimoji \
