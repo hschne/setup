@@ -9,7 +9,7 @@ Setup a place like home. Fully automated arch setup script based on a [markdown 
 This setup does not configure Arch. Use a script like [archfi](https://github.com/MatMoul/archfi) for that. Once Arch is installed you need sudo, git and a user account: 
 
 ```
-pacman -S sudo git
+pacman -S sudo git vim
 useradd -m -g wheel -s /bin/bash <user>
 passwd <user>
 su <user>
