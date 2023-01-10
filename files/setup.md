@@ -80,7 +80,7 @@ yay -S --noconfirm \
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 ```
 
-## Browsers & Dev Tookls
+## Browsers & Dev Tooks
 
 ```bash
 yay -S --noconfirm \
