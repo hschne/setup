@@ -43,7 +43,7 @@ yay -S --noconfirm \
     feh \
     gnome \
     gnome-tweaks \
-    i3-gaps \
+    i3 \
     jsoncpp \
     picom \
     polybar \
