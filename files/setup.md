@@ -52,8 +52,7 @@ yay -S --noconfirm \
     xdotool \
     xorg-xinit\
     xorg-xprop \
-    lxappearance \
-    nordic-theme-git 
+    lxappearance 
 ```
  
 ## CLI
