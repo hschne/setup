@@ -93,7 +93,7 @@ setup::request_sudo() {
   if [ $EUID != 0 ]; then
     console::prompt "This script requires sudo access. Please enter your password: ";
     sudo -v; console::break; 
-  }; fi
+  fi
 
   # Keep-alive: update existing sudo time stamp until the script has finished
   # See here: https://gist.github.com/cowboy/3118588
