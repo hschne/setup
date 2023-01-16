@@ -71,11 +71,13 @@ yay -S --noconfirm \
     thefuck \
     tmux \
     zsh
+
 ```
  
-## Starship Prompts
+## Terminal Tools & Plugins
  
 ```
+sh -c "$(curl -fsSL get.zshell.dev)" -- -i skip -b main
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 ```
 
@@ -106,8 +108,6 @@ yay -S --noconfirm \
     network-manager-applet \
     networkmanager \
     pavucontrol \
-    pipewire \
-    pipewire-pulse \
     gst-plugin-pipewire \
     p7zip \
     ranger \
