@@ -191,13 +191,6 @@ asdf plugin-add nodejs
 ~/.asdf/bin/asdf install nodejs $(asdf latest nodejs)
 ```
 
-## Docker
-
-```bash
-sudo usermod -aG docker "$USER" 
-sudo systemctl enable docker
-```
-
 ## Fonts
 
 ```bash
@@ -207,7 +200,20 @@ yay -S --noconfirm \
     ttf-material-icons-git 
 ```
 
-#### Better Lockscreen
+## Docker
+
+```bash
+sudo usermod -aG docker "$USER" 
+sudo systemctl enable docker
+```
+## Reflector
+
+```bash
+sudo systemctl enable reflector.service reflector.timer
+sudo systemctl start reflector.service reflector.timer
+```
+
+## Better Lockscreen
 
 ```
 mkdir -p ~/Pictures/Backgrounds
