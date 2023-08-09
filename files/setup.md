@@ -41,8 +41,6 @@ yay -S --noconfirm \
     betterlockscreen \
     dunst \
     feh \
-    gnome \
-    gnome-tweaks \
     i3 \
     jsoncpp \
     picom \
@@ -64,6 +62,7 @@ yay -S --noconfirm \
     diff-so-fancy \
     fzf \
     gvim \
+    neovim \
     hub \
     jq \
     httpie \
@@ -192,12 +191,6 @@ asdf plugin-add nodejs
 ~/.asdf/bin/asdf install nodejs $(asdf latest nodejs)
 ```
 
-## GDM
-
-```bash
-sudo systemctl enable gdm
-```
-
 ## Docker
 
 ```bash
@@ -209,18 +202,9 @@ sudo systemctl enable docker
 
 ```bash
 yay -S --noconfirm \
+    ttf-sourcecodepro-nerd \
     ttf-font-awesome \
     ttf-material-icons-git 
-```
-
-## Nerd Fonts
-
-```bash
-mkdir ~/Downloads && cd ~/Downloads
-yay -S --noconfirm xorg-mkfontscale xorg-bdftopcf xorg-font-util 
-yay --getpkgbuild nerd-fonts-complete && cd nerd-fonts-complete
-curl -L --progress-bar https://github.com/ryanoasis/nerd-fonts/archive/v2.1.0.tar.gz -o nerd-fonts-2.1.0.tar.gz 
-makepkg -sci BUILDDIR=.
 ```
 
 #### Better Lockscreen
