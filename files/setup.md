@@ -69,8 +69,8 @@ yay -S --noconfirm \
     ripgrep \
     thefuck \
     tmux \
-    zsh
-
+    zsh \
+    zoxide
 ```
  
 ## Terminal Tools & Plugins
