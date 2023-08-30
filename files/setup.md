@@ -63,6 +63,7 @@ yay -S --noconfirm \
     fzf \
     gvim \
     neovim \
+    navi \
     hub \
     jq \
     httpie \
@@ -157,6 +158,13 @@ git clone git@github.com:andsens/homeshick.git "$homeshick_root"
 
 ```bash
 sudo chsh -s "/bin/zsh" "$USER" 
+```
+
+# Ranger
+
+```bash
+git clone git@github.com:alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
+git clone git@github.com:jchook/ranger-zoxide.git ~/.config/ranger/plugins/zoxide
 ```
 
 ## TPM
