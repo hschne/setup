@@ -221,6 +221,13 @@ sudo systemctl enable reflector.service reflector.timer
 sudo systemctl start reflector.service reflector.timer
 ```
 
+## Redshift
+
+```bash
+sudo systemctl enable redshift.service
+sudo systemctl start redshift.service
+```
+
 ## Better Lockscreen
 
 ```
