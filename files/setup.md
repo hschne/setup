@@ -49,8 +49,7 @@ yay -S --noconfirm \
     rofimoji \
     xdotool \
     xorg-xinit\
-    xorg-xprop \
-    lxappearance 
+    xorg-xprop 
 ```
  
 ## CLI
@@ -61,14 +60,12 @@ yay -S --noconfirm \
     alacritty \
     diff-so-fancy \
     fzf \
-    gvim \
     neovim \
     navi \
     hub \
     jq \
     httpie \
     ripgrep \
-    thefuck \
     tmux \
     zsh \
     zoxide
@@ -88,8 +85,7 @@ yay -S --noconfirm \
     chromium \
     docker \
     docker-compose \
-    firefox-developer-edition \
-    jetbrains-toolbox 
+    firefox-developer-edition 
 ```
 
 ## Utilities & Drivers
