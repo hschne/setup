@@ -136,6 +136,19 @@ yay -S --noconfirm \
 sudo systemctl enable NetworkManager.service
 ```
 
+### Bluetooth
+
+```bash
+yay -S --noconfirm \
+    bluez \
+    bluez-utils \
+    blueman 
+```
+
+```
+systemctl enable bluetooth.service
+```
+
 ### Audio
 
 Install pipewire and related required utilities. For all full guide see [PipeWireWire Guide](https://github.com/mikeroyal/PipeWire-Guide).
