@@ -42,6 +42,7 @@ yay -S --noconfirm \
     dunst \
     feh \
     i3-wm \
+    ly \
     jsoncpp \
     picom \
     polybar \
@@ -50,6 +51,12 @@ yay -S --noconfirm \
     xdotool \
     xorg-xinit\
     xorg-xprop 
+```
+
+### Enable Ly
+
+```bash
+sudo systemctl enable ly.service
 ```
  
 ## CLI
@@ -81,7 +88,6 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 
 ```bash
 yay -S --noconfirm \
-    chromium \
     docker \
     docker-compose \
     firefox-developer-edition 
