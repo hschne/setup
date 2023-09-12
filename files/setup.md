@@ -110,10 +110,7 @@ yay -S --noconfirm \
 yay -S --noconfirm \
     arandr \
     baobab \
-    bluez \
-    bluez-utils \
     ctags \
-    easyeffects \
     gnome-disk-utility \
     gzip \
     htop \
@@ -142,10 +139,11 @@ sudo systemctl enable NetworkManager.service
 yay -S --noconfirm \
     bluez \
     bluez-utils \
-    blueman 
+    blueman
 ```
 
 ```
+modprobe btusb
 systemctl enable bluetooth.service
 ```
 
@@ -155,6 +153,7 @@ Install pipewire and related required utilities. For all full guide see [PipeWir
 
 ```
 yay -S --noconfirm \
+    easyeffects \
     pavucontrol \
     pipewire \
     pipwire-audio \
