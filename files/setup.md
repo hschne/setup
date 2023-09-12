@@ -55,7 +55,6 @@ yay -S --noconfirm \
 ## CLI
 
 ```bash
-yay -R vim --noconfirm
 yay -S --noconfirm \
     alacritty \
     diff-so-fancy \
