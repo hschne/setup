@@ -110,7 +110,6 @@ yay -S --noconfirm \
     w3m \
     wget \
     xclip \
-    xournal \
     xorg-xrandr 
 ```
 
