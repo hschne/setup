@@ -16,11 +16,11 @@ ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 ## GitHub
 
 ```bash
-curl -o /dev/null \
+curl -L \
     -X POST \
-    -s -w "%{http_code}\n" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -H "Authorization: token $TOKEN" \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
     --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
     https://api.github.com/user/keys
 ```
@@ -94,7 +94,6 @@ yay -S --noconfirm pipewire
 yay -S --noconfirm \
     arandr \
     ctags \
-    dialog \
     gzip \
     easyeffects \
     htop \
@@ -108,7 +107,6 @@ yay -S --noconfirm \
     ranger \
     redshift \
     reflector \
-    screenkey \
     w3m \
     wget \
     xclip \
