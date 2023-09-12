@@ -178,15 +178,16 @@ git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
 ## asdf-ruby / asdf-node / asdf-python
 
 ```bash
-export PATH="$HOME/.asdf/bin/asdf:$PATH"
+# ASDF is not yet loaded when installing, we need to use the absolute path
+
 # Ruby
-asdf plugin-add ruby
-asdf install ruby $(asdf latest ruby)
+~/.asdf/bin/asdf plugin-add ruby
+~/.asdf/bin/asdf install ruby $(asdf latest ruby)
 # Python
-asdf plugin-add python
-asdf install python $(asdf latest python)
+~/.asdf/bin/asdf plugin-add python
+~/.asdf/bin/asdf install python $(asdf latest python)
 # Node
-asdf plugin-add nodejs
+~/.asdf/bin/asdf plugin-add nodejs
 "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 ~/.asdf/bin/asdf install nodejs $(asdf latest nodejs)
 ```
