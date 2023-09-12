@@ -46,6 +46,7 @@ yay -S --noconfirm \
     ly \
     jsoncpp \
     picom \
+    polkit \
     polybar \
     rofi \
     rofimoji \
