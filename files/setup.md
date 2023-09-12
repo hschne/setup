@@ -41,7 +41,7 @@ yay -S --noconfirm \
     betterlockscreen \
     dunst \
     feh \
-    i3 \
+    i3-wm \
     jsoncpp \
     picom \
     polybar \
