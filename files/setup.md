@@ -77,8 +77,16 @@ yay -S --noconfirm \
     zsh \
     zoxide
 ```
+
+### Clone Cheats
+
+```
+mkdir -p ~/.local/share/navi/cheats
+cd ~/.local/share/navi/cheats/
+git clone git@github.com:hschne/cheats hschne__cheats
+```
  
-## Terminal Tools & Plugins
+### Terminal Tools & Plugins
  
 ```
 sh -c "$(curl -fsSL get.zshell.dev)" -- -i skip -b main
