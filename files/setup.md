@@ -136,7 +136,7 @@ sudo systemctl enable NetworkManager.service
 
 ### Audio
 
-Install pipewire and related required utilities.
+Install pipewire and related required utilities. For all full guide see [PipeWireWire Guide](https://github.com/mikeroyal/PipeWire-Guide).
 
 ```
 yay -S --noconfirm \
