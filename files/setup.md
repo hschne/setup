@@ -106,7 +106,6 @@ yay -S --noconfirm \
 ## Utilities & Drivers
 
 ```bash
-yay -S --noconfirm pipewire
 yay -S --noconfirm \
     arandr \
     baobab \
@@ -119,8 +118,6 @@ yay -S --noconfirm \
     neofetch \
     network-manager-applet \
     networkmanager \
-    pavucontrol \
-    gst-plugin-pipewire \
     p7zip \
     ranger \
     redshift \
@@ -134,6 +131,21 @@ yay -S --noconfirm \
 
 ```bash
 sudo systemctl enable NetworkManager.service
+```
+
+### Audio
+
+Install pipewire and related required utilities.
+
+```
+yay -S --noconfirm \
+    pavucontrol \
+    pipewire \
+    pipwire-audio \
+    pipewire-alsa \
+    pipewire-jack \
+    pipewire-pulse \
+    wireplumber
 ```
 
 ## Random Apps
