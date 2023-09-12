@@ -110,6 +110,8 @@ yay -S --noconfirm \
 yay -S --noconfirm \
     arandr \
     baobab \
+    bluez \
+    bluez-utils \
     ctags \
     easyeffects \
     gnome-disk-utility \
