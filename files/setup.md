@@ -99,9 +99,11 @@ yay -S --noconfirm \
 yay -S --noconfirm pipewire
 yay -S --noconfirm \
     arandr \
+    baobab \
     ctags \
-    gzip \
     easyeffects \
+    gnome-disk-utility \
+    gzip \
     htop \
     mesa \
     neofetch \
