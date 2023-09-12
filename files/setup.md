@@ -38,6 +38,7 @@ makepkg -si --noconfirm
 ```bash
 yay -S --noconfirm \
     arandr \
+    autorandr \
     betterlockscreen \
     dunst \
     feh \
