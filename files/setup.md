@@ -55,10 +55,11 @@ yay -S --noconfirm \
     xorg-xprop 
 ```
 
-### Enable Ly
+### Enable Ly & Autorandr
 
 ```bash
 sudo systemctl enable ly.service
+sudo systemctl enable autorandr.service
 ```
  
 ## CLI
@@ -146,6 +147,12 @@ yay -S --noconfirm \
     pipewire-jack \
     pipewire-pulse \
     wireplumber
+```
+
+```
+systemctl --user enable --now pipewire.socket
+systemctl --user enable --now pipewire-pulse.socket
+systemctl --user enable --now wireplumber.service
 ```
 
 ## Random Apps
