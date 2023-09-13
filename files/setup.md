@@ -114,6 +114,7 @@ yay -S --noconfirm \
     gnome-disk-utility \
     gzip \
     htop \
+    less \
     mesa \
     neofetch \
     network-manager-applet \
