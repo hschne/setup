@@ -15,6 +15,8 @@ ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 
 ## GitHub
 
+See [Create a public SSH key for the authenticated user](https://docs.github.com/en/rest/users/keys?apiVersion=2022-11-28#create-a-public-ssh-key-for-the-authenticated-user) for details.
+
 ```bash
 curl -L \
     -X POST \
