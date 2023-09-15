@@ -258,7 +258,8 @@ git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
 yay -S --noconfirm \
     ttf-sourcecodepro-nerd \
     ttf-font-awesome \
-    ttf-material-icons-git 
+    ttf-noto-fonts-emoji \
+    ttf-material-icons-git
 ```
 
 ## Docker
