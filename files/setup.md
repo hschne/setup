@@ -156,7 +156,9 @@ Install pipewire and related required utilities. For all full guide see [PipeWir
 
 ```
 yay -S --noconfirm \
+    alsa-utils \
     easyeffects \
+    lsp-plugins \
     pavucontrol \
     pipewire \
     pipwire-audio \
