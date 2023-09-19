@@ -70,6 +70,7 @@ sudo systemctl enable autorandr.service
 yay -S --noconfirm \
     alacritty \
     diff-so-fancy \
+    fd \
     fzf \
     neovim \
     navi \
