@@ -297,3 +297,18 @@ curl https://i.imgur.com/f5YDfNq.jpg -o ~/Pictures/Backgrounds/autumn.jpg
 curl https://i.imgur.com/g9h0kkl.jpg -o ~/Pictures/Backgrounds/tundra.jpg 
 betterlockscreen -u ~/Pictures/Backgrounds
 ```
+
+## Spicetify
+
+Command-line tool to customize the official Spotify client, see [spicetify-cli](https://github.com/spicetify/spicetify-cli)
+
+```bash
+yay -S spicetify-cli
+sudo chmod a+wr /opt/spotify
+sudo chmod a+wr /opt/spotify/Apps -R
+spicetify backup apply enable-devtools
+curl https://raw.githubusercontent.com/spicetify/spicetify-themes/master/Sleek/color.ini -o .spicetify/Themes/SpicetifyDefault/color.ini
+curl https://raw.githubusercontent.com/spicetify/spicetify-themes/master/Sleek/user.css -o .spicetify/Themes/SpicetifyDefault/user.css
+spicetify config current_theme SpicetifyDefault color_scheme Nord
+spicetify apply
+```
