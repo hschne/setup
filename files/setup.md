@@ -112,6 +112,7 @@ yay -S --noconfirm \
 ```bash
 yay -S --noconfirm \
     arandr \
+    bat \
     baobab \
     ctags \
     gnome-disk-utility \
