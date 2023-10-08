@@ -183,6 +183,7 @@ systemctl --user enable --now wireplumber.service
 
 ```bash
 yay -S --noconfirm \
+    cli-visualizer \
     calibre \
     gimp \
     inkscape \
