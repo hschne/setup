@@ -192,7 +192,6 @@ yay -S --noconfirm \
     spotify \
     syncthing \
     syncthingtray \
-    slack-desktop \
     vlc \
     zathura \
     zathura-pdf-mupdf 
