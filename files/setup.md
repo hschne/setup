@@ -52,6 +52,7 @@ yay -S --noconfirm \
     polybar \
     rofi \
     rofimoji \
+    xbanish \
     xdotool \
     xorg-xinit\
     xorg-xprop 
