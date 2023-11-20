@@ -121,6 +121,7 @@ yay -S --noconfirm \
     htop \
     less \
     mesa \
+    nautilus \
     neofetch \
     network-manager-applet \
     networkmanager \
