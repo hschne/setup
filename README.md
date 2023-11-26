@@ -6,7 +6,15 @@ Setup a place like home. Fully automated arch setup script based on a [markdown 
 
 ## Requirements
 
-This setup does not configure Arch. Use a script like [archfi](https://github.com/MatMoul/archfi) for that. Once Arch is installed you need sudo, git and a user account: 
+This setup does not configure Arch. Use a script like [archfi](https://github.com/MatMoul/archfi) for that. Once Arch is installed, mount your partitions and `arch-chroot`:
+
+```
+mount /dev/dev1 /mnt
+swapon /dev/dev2
+arch-chroot /mnt
+```
+
+Next, install some utilities and create a user account: 
 
 ```
 pacman -S sudo git vim
