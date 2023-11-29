@@ -52,6 +52,7 @@ yay -S --noconfirm \
     polybar \
     rofi \
     rofimoji \
+    xorg \
     xbanish \
     xdotool \
     xorg-xinit\
@@ -262,7 +263,7 @@ git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
 yay -S --noconfirm \
     ttf-sourcecodepro-nerd \
     ttf-font-awesome \
-    ttf-noto-fonts-emoji \
+    noto-fonts-emoji \
     ttf-material-icons-git
 ```
 
