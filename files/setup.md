@@ -117,6 +117,7 @@ yay -S --noconfirm \
     bat \
     baobab \
     ctags \
+    eog \
     gnome-disk-utility \
     gzip \
     htop \
@@ -195,6 +196,7 @@ yay -S --noconfirm \
     syncthing \
     syncthingtray \
     vlc \
+    xournalpp \
     zathura \
     zathura-pdf-mupdf 
 ```
