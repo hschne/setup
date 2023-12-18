@@ -131,6 +131,7 @@ yay -S --noconfirm \
     ranger \
     redshift \
     reflector \
+    unzip \
     w3m \
     wget \
     xclip \
