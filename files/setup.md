@@ -118,6 +118,7 @@ yay -S --noconfirm \
     baobab \
     ctags \
     eog \
+    fx \
     gnome-disk-utility \
     gzip \
     htop \
