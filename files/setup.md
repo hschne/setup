@@ -236,30 +236,22 @@ git clone git@github.com:tmux-plugins/tpm.git  "$tpm_root"
 "$tpm_root/scripts/install_plugins.sh"
 ```
 
-## ASDF
+## Mise
 
-```bash
-asdf_root="$HOME/.asdf"
-
-git clone  git@github.com:asdf-vm/asdf.git "$asdf_root"
+```
+curl https://mise.run | sh
+# Setup usage for completions
+~/.local/bin/mise use -g usage
+~/.local/bin/mise completion zsh  > /usr/local/share/zsh/site-functions/_mise
 ```
 
-## asdf-ruby / asdf-node / asdf-python
-
-```bash
-# ASDF is not yet loaded when installing, we need to use the absolute path
-
-# Ruby
-~/.asdf/bin/asdf plugin-add ruby
-~/.asdf/bin/asdf install ruby $(asdf latest ruby)
-# Python
-~/.asdf/bin/asdf plugin-add python
-~/.asdf/bin/asdf install python $(asdf latest python)
-# Node
-~/.asdf/bin/asdf plugin-add nodejs
-"$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
-~/.asdf/bin/asdf install nodejs $(asdf latest nodejs)
+### Install Node, Ruby & Python
 ```
+~/.local/bin/mise use --global node@latest
+~/.local/bin/mise use --global ruby@latest
+~/.local/bin/mise use --global python@latest
+```
+
 
 ## Fonts
 
