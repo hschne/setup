@@ -113,8 +113,6 @@ yay -S --noconfirm \
 
 ```bash
 yay -S --noconfirm \
-    arandr \
-    bat \
     baobab \
     ctags \
     eog \
@@ -189,7 +187,6 @@ systemctl --user enable --now wireplumber.service
 
 ```bash
 yay -S --noconfirm \
-    cli-visualizer \
     calibre \
     gimp \
     inkscape \
@@ -269,6 +266,7 @@ yay -S --noconfirm \
 sudo usermod -aG docker "$USER" 
 sudo systemctl enable docker
 ```
+
 ## Reflector
 
 ```bash
