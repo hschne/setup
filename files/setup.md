@@ -134,8 +134,9 @@ yay -S --noconfirm \
     w3m \
     wget \
     xclip \
+    xpastemouseblock \
     xorg-xrdb \ 
-    xorg-xrandr 
+    xorg-xrandr
 ```
 
 ```bash
