@@ -13,20 +13,6 @@ ssh-keygen -b 4096 -t rsa -N '' -q -C "$USER" -f "$HOME/.ssh/id_rsa" <<< $'\ny'
 ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 ```
 
-## GitHub
-
-See [Create a public SSH key for the authenticated user](https://docs.github.com/en/rest/users/keys?apiVersion=2022-11-28#create-a-public-ssh-key-for-the-authenticated-user) for details.
-
-```bash
-curl -L \
-    -X POST \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $TOKEN" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    --data "{\"title\":\"$USER@$(hostname)\",\"key\":\"$(cat ~/.ssh/id_rsa.pub)\"}" \
-    https://api.github.com/user/keys
-```
-
 ## Setup Yay
 
 ```bash
@@ -114,6 +100,7 @@ yay -S --noconfirm \
 ```bash
 yay -S --noconfirm \
     baobab \
+    bat \
     ctags \
     eog \
     fx \
@@ -209,7 +196,7 @@ homeshick_bin="$homeshick_root/bin/homeshick"
 
 git clone git@github.com:andsens/homeshick.git "$homeshick_root" 
 
-"${homeshick_bin}" clone --batch git@github.com:glumpat/dotfiles.git
+"${homeshick_bin}" clone --batch git@github.com:hschne/dotfiles.git
 "${homeshick_bin}" link --force
 ```
 
