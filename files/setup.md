@@ -57,7 +57,7 @@ sudo systemctl enable autorandr.service
 ```bash
 yay -S --noconfirm \
     alacritty \
-    diff-so-fancy \
+    delta-diff \
     fd \
     fzf \
     neovim \
