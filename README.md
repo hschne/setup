@@ -1,5 +1,14 @@
 # Setup
 
+TODO CHANGES:
+
+- Change to archinstall
+- Add custom packages for base (git, vim, openssh)
+- Change GH Links to https then change to ssh remote?
+- Fix asdf ruby & python install (needs grep to install latest)
+- Install asdf via arch
+- Create default ~/.env
+
 [![Main](https://github.com/glumpat/setup/actions/workflows/main.yml/badge.svg)](https://github.com/glumpat/setup/actions/workflows/main.yml)
 
 Setup a place like home. Fully automated arch setup script based on a [markdown file](files/setup.md) . Install all the packages, and all the CLI tools, everything.
@@ -14,7 +23,7 @@ swapon /dev/dev2
 arch-chroot /mnt
 ```
 
-Next, install some utilities and create a user account: 
+Next, install some utilities and create a user account:
 
 ```
 pacman -S sudo git vim
@@ -23,7 +32,7 @@ passwd <user>
 su <user>
 ```
 
-Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. You will also need to set a variable `TOKEN` to your GitHub application token for this script. You can set your token and test it by running: 
+Run `visudo` and uncomment `"%wheel    ALL=(ALL) ALL"`. You will also need to set a variable `TOKEN` to your GitHub application token for this script. You can set your token and test it by running:
 
 ```
 TOKEN=<your-app-token>
@@ -43,9 +52,10 @@ Have a look at the [script](setup.sh) for more info.
 
 ## Development
 
-To modify which packages get installed edit the [setup](files/setup.md) file. 
+To modify which packages get installed edit the [setup](files/setup.md) file.
 
-### Testing 
+### Testing
+
 In order to test if your script you can utilize Docker with a custom image. Build it using
 
 ```
@@ -53,6 +63,7 @@ docker build -t 'glumpat/setup-test' .
 ```
 
 Debugging specific parts of the script is possible by attaching to the image
+
 ```
 docker run --rm -ti -v $PWD:/home/ glumpat/setup-test bash
 ```
@@ -65,10 +76,8 @@ To execute the entire install script execute
 
 ### Deployment
 
-Run [gatsh](https://github.com/hschne/gatsh/tree/master) to create a new distribution: 
+Run [gatsh](https://github.com/hschne/gatsh/tree/master) to create a new distribution:
 
 ```
 gatsh setup.sh >> dist/setup.sh
 ```
-
-
