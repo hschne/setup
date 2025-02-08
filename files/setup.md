@@ -224,7 +224,17 @@ git clone git@github.com:tmux-plugins/tpm.git  "$tpm_root"
 
 ### Install Node, Ruby & Python
 ```
-asdf install ruby
+asdf plugin add ruby
+asdf install ruby latest
+# Python
+asdf plugin add python
+asdf install python latest
+# Node
+asdf plugin add nodejs
+asdf install nodejs latest
+# Go
+asdf plugin add golang
+asdf install golang latest
 ```
 
 
