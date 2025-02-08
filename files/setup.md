@@ -57,6 +57,7 @@ sudo systemctl enable autorandr.service
 ```bash
 yay -S --noconfirm \
     alacritty \
+    asdf-vm \
     delta-diff \
     fd \
     fzf \
@@ -221,20 +222,9 @@ git clone git@github.com:tmux-plugins/tpm.git  "$tpm_root"
 "$tpm_root/scripts/install_plugins.sh"
 ```
 
-## Mise
-
-```
-curl https://mise.run | sh
-# Setup usage for completions
-~/.local/bin/mise use -g usage
-~/.local/bin/mise completion zsh  > /usr/local/share/zsh/site-functions/_mise
-```
-
 ### Install Node, Ruby & Python
 ```
-~/.local/bin/mise use --global node@latest
-~/.local/bin/mise use --global ruby@latest
-~/.local/bin/mise use --global python@latest
+asdf install ruby
 ```
 
 
