@@ -1,11 +1,5 @@
 # Setup
 
-## Basics
-
-```bash
-sudo pacman -Sy --noconfirm base-devel git curl openssh inetutils
-```
-
 ## SSH Key
 
 ```bash
