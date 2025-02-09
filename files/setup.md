@@ -176,11 +176,16 @@ yay -S --noconfirm \
     speedcrunch \
     spotify \
     syncthing \
-    syncthingtray \
     vlc \
     xournalpp \
     zathura \
     zathura-pdf-mupdf 
+```
+
+## Enable Syncthing
+
+```bash
+systemctl enable syncthing@$USER.service
 ```
 
 ## Homeshick
