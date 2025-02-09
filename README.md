@@ -8,6 +8,8 @@ TODO CHANGES:
 - Fix asdf ruby & python install (needs grep to install latest)
 - Install asdf via arch
 - Create default ~/.env
+- Change backlight stuff to brightnessctl 
+- Use github-cli instead of hub (outdated)
 
 [![Main](https://github.com/glumpat/setup/actions/workflows/main.yml/badge.svg)](https://github.com/glumpat/setup/actions/workflows/main.yml)
 
