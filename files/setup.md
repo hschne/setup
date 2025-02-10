@@ -52,7 +52,7 @@ sudo systemctl enable autorandr.service
 yay -S --noconfirm \
     alacritty \
     asdf-vm \
-    delta-diff \
+    git-delta \
     fd \
     fzf \
     neovim \
