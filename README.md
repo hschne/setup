@@ -10,6 +10,7 @@ TODO CHANGES:
 - Create default ~/.env
 - Change backlight stuff to brightnessctl 
 - Use github-cli instead of hub (outdated)
+- Add filezilla, mariadb client libraries 
 
 [![Main](https://github.com/glumpat/setup/actions/workflows/main.yml/badge.svg)](https://github.com/glumpat/setup/actions/workflows/main.yml)
 
