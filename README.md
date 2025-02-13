@@ -11,6 +11,7 @@ TODO CHANGES:
 - Change backlight stuff to brightnessctl 
 - Use github-cli instead of hub (outdated)
 - Add filezilla, mariadb client libraries 
+- Remove all gnome apps (nautilus, disk, whatever
 
 [![Main](https://github.com/glumpat/setup/actions/workflows/main.yml/badge.svg)](https://github.com/glumpat/setup/actions/workflows/main.yml)
 
