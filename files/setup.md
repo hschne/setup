@@ -22,6 +22,7 @@ yay -S --noconfirm \
     arandr \
     autorandr \
     betterlockscreen \
+    brightnessctl \
     dunst \
     feh \
     i3-wm \
@@ -55,9 +56,9 @@ yay -S --noconfirm \
     git-delta \
     fd \
     fzf \
+    github-cli \
     neovim \
     navi \
-    hub \
     jq \
     httpie \
     ripgrep \
@@ -71,7 +72,8 @@ yay -S --noconfirm \
 ```
 mkdir -p ~/.local/share/navi/cheats
 cd ~/.local/share/navi/cheats/
-git clone git@github.com:hschne/cheats hschne__cheats
+git clone https://github.com/hschne/cheats.git hschne__cheats
+cd hschne__cheats && git remote set-url origin git@github.com:hschne/ruby-conferences.github.io.git
 ```
  
 ### Terminal Tools & Plugins
@@ -94,17 +96,13 @@ yay -S --noconfirm \
 
 ```bash
 yay -S --noconfirm \
-    baobab \
     bat \
     ctags \
-    eog \
     fx \
-    gnome-disk-utility \
+    filezilla \
     gzip \
     htop \
     less \
-    mesa \
-    nautilus \
     neofetch \
     network-manager-applet \
     networkmanager \
@@ -114,7 +112,6 @@ yay -S --noconfirm \
     reflector \
     unzip \
     w3m \
-    wget \
     xclip \
     xpastemouseblock \
     xorg-xrdb \ 
@@ -194,10 +191,16 @@ systemctl enable syncthing@$USER.service
 homeshick_root="$HOME/.homesick/repos/homeshick"
 homeshick_bin="$homeshick_root/bin/homeshick"
 
-git clone git@github.com:andsens/homeshick.git "$homeshick_root" 
+git clone https://github.com/andsens/homeshick.git "$homeshick_root" 
 
-"${homeshick_bin}" clone --batch git@github.com:hschne/dotfiles.git
+"${homeshick_bin}" clone --batch https://github.com/hschne/dotfiles.git
 "${homeshick_bin}" link --force
+```
+
+Create default `.env` file.
+
+```
+touch ~/.env
 ```
 
 ## ZSH
@@ -209,30 +212,34 @@ sudo chsh -s "/bin/zsh" "$USER"
 # Ranger
 
 ```bash
-git clone git@github.com:alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
-git clone git@github.com:jchook/ranger-zoxide.git ~/.config/ranger/plugins/zoxide
+git clone https://github.com/alexanderjeurissen/ranger_devicons.git ~/.config/ranger/plugins/ranger_devicons
+git clone https://github.com/jchook/ranger-zoxide.git ~/.config/ranger/plugins/zoxide
 ```
 
 ## TPM
 
 ```bash
 tpm_root="$HOME/.tmux/plugins/tpm"
-git clone git@github.com:tmux-plugins/tpm.git  "$tpm_root"
+git clone https://github.com/tmux-plugins/tpm.git  "$tpm_root"
 "$tpm_root/scripts/install_plugins.sh"
 ```
 
 ### Install Node, Ruby & Python
 ```
 asdf plugin add ruby
-asdf install ruby latest
+# Workaround to fix list
+latest=$(asdf list all ruby | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
+asdf install ruby $latest
 # Python
 asdf plugin add python
+latest=$(asdf list all python | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
 asdf install python latest
 # Node
 asdf plugin add nodejs
 asdf install nodejs latest
 # Go
 asdf plugin add golang
+latest=$(asdf list all golang | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
 asdf install golang latest
 ```
 

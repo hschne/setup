@@ -4,12 +4,6 @@ TODO CHANGES:
 
 - Change to archinstall
 - Add custom packages for base (git, vim, openssh)
-- Change GH Links to https then change to ssh remote?
-- Fix asdf ruby & python install (needs grep to install latest)
-- Install asdf via arch
-- Create default ~/.env
-- Change backlight stuff to brightnessctl 
-- Use github-cli instead of hub (outdated)
 - Add filezilla, mariadb client libraries 
 - Remove all gnome apps (nautilus, disk, whatever
 
