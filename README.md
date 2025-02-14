@@ -4,8 +4,6 @@ TODO CHANGES:
 
 - Change to archinstall
 - Add custom packages for base (git, vim, openssh)
-- Add filezilla, mariadb client libraries 
-- Remove all gnome apps (nautilus, disk, whatever
 
 [![Main](https://github.com/glumpat/setup/actions/workflows/main.yml/badge.svg)](https://github.com/glumpat/setup/actions/workflows/main.yml)
 

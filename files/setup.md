@@ -106,6 +106,7 @@ yay -S --noconfirm \
     neofetch \
     network-manager-applet \
     networkmanager \
+    mariadb-libs \
     p7zip \
     ranger \
     redshift \
