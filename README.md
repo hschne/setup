@@ -1,10 +1,5 @@
 # Setup
 
-TODO CHANGES:
-
-- Change to archinstall
-- Add custom packages for base (git, vim, openssh)
-
 [![Main](https://github.com/glumpat/setup/actions/workflows/main.yml/badge.svg)](https://github.com/glumpat/setup/actions/workflows/main.yml)
 
 Setup a place like home. Fully automated arch setup script based on a [markdown file](files/setup.md) . Install all the packages, and all the CLI tools, everything.

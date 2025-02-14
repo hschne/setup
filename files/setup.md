@@ -143,7 +143,6 @@ Install pipewire and related required utilities. For all full guide see [PipeWir
 
 ```
 yay -S --noconfirm \
-    alsa-utils \
     calf \
     easyeffects \
     lsp-plugins-lv2 \
@@ -151,8 +150,6 @@ yay -S --noconfirm \
     pavucontrol \
     pipewire \
     pipwire-audio \
-    pipewire-alsa \
-    pipewire-jack \
     pipewire-pulse \
     wireplumber \
     zam-plugins-lv2
