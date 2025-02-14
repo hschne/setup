@@ -166,6 +166,7 @@ systemctl --user enable --now wireplumber.service
 ```bash
 yay -S --noconfirm \
     calibre \
+    libreoffice-still \
     gimp \
     inkscape \
     speedcrunch \
