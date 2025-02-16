@@ -10,9 +10,9 @@ ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
 ## Setup Yay
 
 ```bash
-git clone https://aur.archlinux.org/yay.git 
+git clone https://aur.archlinux.org/yay.git
 cd yay
-makepkg -si --noconfirm 
+makepkg -si --noconfirm
 ```
 
 ## Desktop
@@ -37,7 +37,7 @@ yay -S --noconfirm \
     xbanish \
     xdotool \
     xorg-xinit\
-    xorg-xprop 
+    xorg-xprop
 ```
 
 ### Enable Ly & Autorandr
@@ -46,7 +46,7 @@ yay -S --noconfirm \
 sudo systemctl enable ly.service
 sudo systemctl enable autorandr.service
 ```
- 
+
 ## CLI
 
 ```bash
@@ -75,9 +75,9 @@ cd ~/.local/share/navi/cheats/
 git clone https://github.com/hschne/cheats.git hschne__cheats
 cd hschne__cheats && git remote set-url origin git@github.com:hschne/ruby-conferences.github.io.git
 ```
- 
+
 ### Terminal Tools & Plugins
- 
+
 ```
 sh -c "$(curl -fsSL get.zshell.dev)" -- -i skip -b main
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
@@ -89,7 +89,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 yay -S --noconfirm \
     docker \
     docker-compose \
-    firefox-developer-edition 
+    firefox-developer-edition
 ```
 
 ## Utilities & Drivers
@@ -115,7 +115,7 @@ yay -S --noconfirm \
     w3m \
     xclip \
     xpastemouseblock \
-    xorg-xrdb \ 
+    xorg-xrdb \
     xorg-xrandr
 ```
 
@@ -170,12 +170,12 @@ yay -S --noconfirm \
     gimp \
     inkscape \
     speedcrunch \
-    spotify \
+    spotify-launcher \
     syncthing \
     vlc \
     xournalpp \
     zathura \
-    zathura-pdf-mupdf 
+    zathura-pdf-mupdf
 ```
 
 ## Enable Syncthing
@@ -190,7 +190,7 @@ systemctl enable syncthing@$USER.service
 homeshick_root="$HOME/.homesick/repos/homeshick"
 homeshick_bin="$homeshick_root/bin/homeshick"
 
-git clone https://github.com/andsens/homeshick.git "$homeshick_root" 
+git clone https://github.com/andsens/homeshick.git "$homeshick_root"
 
 "${homeshick_bin}" clone --batch https://github.com/hschne/dotfiles.git
 "${homeshick_bin}" link --force
@@ -205,7 +205,7 @@ touch ~/.env
 ## ZSH
 
 ```bash
-sudo chsh -s "/bin/zsh" "$USER" 
+sudo chsh -s "/bin/zsh" "$USER"
 ```
 
 # Ranger
@@ -224,6 +224,7 @@ git clone https://github.com/tmux-plugins/tpm.git  "$tpm_root"
 ```
 
 ### Install Node, Ruby & Python
+
 ```
 asdf plugin add ruby
 # Workaround to fix list
@@ -242,7 +243,6 @@ latest=$(asdf list all golang | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
 asdf install golang latest
 ```
 
-
 ## Fonts
 
 ```bash
@@ -256,7 +256,7 @@ yay -S --noconfirm \
 ## Docker
 
 ```bash
-sudo usermod -aG docker "$USER" 
+sudo usermod -aG docker "$USER"
 sudo systemctl enable docker
 ```
 
