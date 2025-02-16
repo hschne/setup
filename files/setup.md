@@ -171,6 +171,7 @@ yay -S --noconfirm \
     inkscape \
     speedcrunch \
     spotify-launcher \
+    spicetify \
     syncthing \
     vlc \
     xournalpp \
@@ -182,6 +183,17 @@ yay -S --noconfirm \
 
 ```bash
 systemctl enable syncthing@$USER.service
+```
+
+## Setup spicetify
+
+```bash
+spicetify
+spicetify backup apply enable-devtools
+git clone --depth=1 https://github.com/spicetify/spicetify-themes.git
+cd spicetify-themes && cp -r * ~/.config/spicetify/Themes
+spicetify config current_theme Sleek
+spicetify config color_scheme elementary
 ```
 
 ## Homeshick
