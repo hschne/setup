@@ -171,7 +171,7 @@ yay -S --noconfirm \
     inkscape \
     speedcrunch \
     spotify-launcher \
-    spicetify \
+    spicetify-cli \
     syncthing \
     vlc \
     xournalpp \
