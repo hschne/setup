@@ -63,6 +63,7 @@ yay -S --noconfirm \
     httpie \
     ripgrep \
     tmux \
+    walk \
     zsh \
     zoxide
 ```
