@@ -26,13 +26,14 @@ yay -S --noconfirm \
     dunst \
     feh \
     i3-wm \
-    ly \
     jsoncpp \
     picom \
     polkit \
     polybar \
     rofi \
     rofimoji \
+    sddm \
+    sddm-theme-tokyo-night-git \
     xorg \
     xbanish \
     xdotool \
@@ -90,7 +91,8 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 yay -S --noconfirm \
     docker \
     docker-compose \
-    firefox-developer-edition
+    firefox  \
+    chromium
 ```
 
 ## Utilities & Drivers
@@ -133,7 +135,7 @@ yay -S --noconfirm \
     blueman
 ```
 
-```
+```bash
 modprobe btusb
 systemctl enable bluetooth.service
 ```
@@ -142,7 +144,7 @@ systemctl enable bluetooth.service
 
 Install pipewire and related required utilities. For all full guide see [PipeWireWire Guide](https://github.com/mikeroyal/PipeWire-Guide).
 
-```
+```bash
 yay -S --noconfirm \
     calf \
     easyeffects \
@@ -156,7 +158,7 @@ yay -S --noconfirm \
     zam-plugins-lv2
 ```
 
-```
+```bash
 systemctl --user enable --now pipewire.socket
 systemctl --user enable --now pipewire-pulse.socket
 systemctl --user enable --now wireplumber.service
@@ -211,7 +213,7 @@ git clone https://github.com/andsens/homeshick.git "$homeshick_root"
 
 Create default `.env` file.
 
-```
+```bash
 touch ~/.env
 ```
 
@@ -238,7 +240,7 @@ git clone https://github.com/tmux-plugins/tpm.git  "$tpm_root"
 
 ### Install Node, Ruby & Python
 
-```
+```bash
 asdf plugin add ruby
 # Workaround to fix list
 latest=$(asdf list all ruby | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
