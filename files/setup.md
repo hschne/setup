@@ -44,7 +44,7 @@ yay -S --noconfirm \
 ### Enable Ly & Autorandr
 
 ```bash
-sudo systemctl enable ly.service
+sudo systemctl enable sddm.service
 sudo systemctl enable autorandr.service
 ```
 
@@ -71,7 +71,7 @@ yay -S --noconfirm \
 
 ### Clone Cheats
 
-```
+```bash
 mkdir -p ~/.local/share/navi/cheats
 cd ~/.local/share/navi/cheats/
 git clone https://github.com/hschne/cheats.git hschne__cheats
@@ -80,7 +80,7 @@ cd hschne__cheats && git remote set-url origin git@github.com:hschne/ruby-confer
 
 ### Terminal Tools & Plugins
 
-```
+```bash
 sh -c "$(curl -fsSL get.zshell.dev)" -- -i skip -b main
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 ```
@@ -185,18 +185,7 @@ yay -S --noconfirm \
 ## Enable Syncthing
 
 ```bash
-systemctl enable syncthing@$USER.service
-```
-
-## Setup spicetify
-
-```bash
-spicetify
-spicetify backup apply enable-devtools
-git clone --depth=1 https://github.com/spicetify/spicetify-themes.git
-cd spicetify-themes && cp -r * ~/.config/spicetify/Themes
-spicetify config current_theme Sleek
-spicetify config color_scheme elementary
+systemctl enable --user syncthing.service
 ```
 
 ## Homeshick
@@ -211,10 +200,11 @@ git clone https://github.com/andsens/homeshick.git "$homeshick_root"
 "${homeshick_bin}" link --force
 ```
 
-Create default `.env` file.
+Create default `.env` file and Source folder.
 
 ```bash
 touch ~/.env
+mkdir ~/Source
 ```
 
 ## ZSH
@@ -245,17 +235,22 @@ asdf plugin add ruby
 # Workaround to fix list
 latest=$(asdf list all ruby | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
 asdf install ruby $latest
+asdf set -u ruby $latest
 # Python
 asdf plugin add python
 latest=$(asdf list all python | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
-asdf install python latest
+asdf install python $latest
+asdf set -u python $latest
 # Node
 asdf plugin add nodejs
 asdf install nodejs latest
+latest=$(asdf list nodejs | tail -n1)
+asdf set -u nodejs $latest
 # Go
 asdf plugin add golang
 latest=$(asdf list all golang | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
-asdf install golang latest
+asdf install golang $latest
+asdf set -u golang $latest
 ```
 
 ## Fonts
@@ -293,4 +288,18 @@ systemctl --user start redshift.service
 
 ```
 betterlockscreen -u ~/Pictures/Backgrounds
+```
+
+## Setup Spicetify
+
+You must run Spotify once before running Spicetify
+
+```bash
+spicetify
+spicetify backup apply enable-devtools
+git clone --depth=1 https://github.com/spicetify/spicetify-themes.git
+cd spicetify-themes && cp -r * ~/.config/spicetify/Themes
+spicetify config current_theme Sleek
+spicetify config color_scheme elementary
+spicetiry apply
 ```
