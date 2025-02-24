@@ -58,6 +58,7 @@ yay -S --noconfirm \
     fd \
     fzf \
     github-cli \
+    lazygit \
     neovim \
     navi \
     jq \
