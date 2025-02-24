@@ -102,8 +102,9 @@ yay -S --noconfirm \
 yay -S --noconfirm \
     bat \
     ctags \
-    fx \
     filezilla \
+    flameshot \
+    fx \
     gzip \
     htop \
     less \
