@@ -116,6 +116,7 @@ yay -S --noconfirm \
     ranger \
     redshift \
     reflector \
+    silicon \
     unzip \
     w3m \
     xclip \
