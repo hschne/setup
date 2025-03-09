@@ -86,7 +86,7 @@ sh -c "$(curl -fsSL get.zshell.dev)" -- -i skip -b main
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 ```
 
-## Browsers & Dev Tooks
+## Browsers & Dev Tools
 
 ```bash
 yay -S --noconfirm \
@@ -102,6 +102,7 @@ yay -S --noconfirm \
 yay -S --noconfirm \
     bat \
     ctags \
+    dua-cli \
     filezilla \
     flameshot \
     fx \
@@ -175,6 +176,8 @@ yay -S --noconfirm \
     libreoffice-still \
     gimp \
     inkscape \
+    kdenlive \
+    signal-desktop \
     speedcrunch \
     spotify-launcher \
     spicetify-cli \
