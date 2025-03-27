@@ -55,9 +55,11 @@ yay -S --noconfirm \
     alacritty \
     asdf-vm \
     git-delta \
+    eza \
     fd \
     fzf \
     github-cli \
+    glab \
     lazygit \
     neovim \
     navi \
