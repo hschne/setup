@@ -240,25 +240,24 @@ git clone https://github.com/tmux-plugins/tpm.git  "$tpm_root"
 
 ```bash
 asdf plugin add ruby
-# Workaround to fix list
-latest=$(asdf list all ruby | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
-asdf install ruby $latest
-asdf set -u ruby $latest
+asdf install ruby $(asdf latest ruby)
+asdf set -u ruby $(asdf latest ruby)
+
 # Python
 asdf plugin add python
-latest=$(asdf list all python | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
-asdf install python $latest
-asdf set -u python $latest
+asdf install python $(asdf latest python)
+asdf set -u python $(asdf latest python)
+
 # Node
 asdf plugin add nodejs
-asdf install nodejs latest
-latest=$(asdf list nodejs | tail -n1)
-asdf set -u nodejs $latest
+asdf install nodejs $(asdf latest nodejs)
+asdf set -u nodejs $(asdf latest nodejs)
+
 # Go
 asdf plugin add golang
-latest=$(asdf list all golang | grep -P "^\d+\.\d+\.\d+$" | tail -n1)
-asdf install golang $latest
-asdf set -u golang $latest
+asdf install golang $(asdf latest golang)
+asdf set -u golang $(asdf latest golang)
+
 ```
 
 ## Fonts
