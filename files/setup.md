@@ -102,6 +102,7 @@ yay -S --noconfirm \
 
 ```bash
 yay -S --noconfirm \
+    atuin \
     bat \
     ctags \
     dua-cli \
