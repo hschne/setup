@@ -95,6 +95,7 @@ yay -S --noconfirm \
     docker \
     docker-compose \
     firefox  \
+    libewolf-bin \
     chromium
 ```
 
