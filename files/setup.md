@@ -58,6 +58,7 @@ yay -S --noconfirm \
     eza \
     fd \
     fzf \
+    noti \
     github-cli \
     glab \
     lazygit \
