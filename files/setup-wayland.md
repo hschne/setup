@@ -1,4 +1,4 @@
-# Setup
+# Setup (Wayland/Hyprland)
 
 ## SSH Key
 
@@ -15,49 +15,11 @@ cd yay
 makepkg -si --noconfirm
 ```
 
-## Desktop (X11 - i3)
+## Desktop
 
 ```bash
 yay -S --noconfirm \
-    arandr \
-    autorandr \
-    betterlockscreen \
     brightnessctl \
-    dunst \
-    feh \
-    i3-wm \
-    jsoncpp \
-    picom \
-    polkit \
-    polybar \
-    rofi \
-    rofimoji \
-    sddm \
-    sddm-theme-tokyo-night-git \
-    xorg \
-    xbanish \
-    xdotool \
-    xorg-xinit\
-    xorg-xprop
-```
-
-### Enable SDDM & Autorandr (X11)
-
-```bash
-sudo systemctl enable sddm.service
-sudo systemctl enable autorandr.service
-```
-
-## Desktop (Wayland - Hyprland)
-
-```bash
-yay -S --noconfirm \
-    bluetui \
-    brightnessctl \
-    btop \
-    dust \
-    fastfetch \
-    gpu-screen-recorder \
     grim \
     hypridle \
     hyprland \
@@ -65,10 +27,8 @@ yay -S --noconfirm \
     hyprpaper \
     hyprpicker \
     hyprsunset \
-    impala \
     imv \
     kanshi \
-    lazydocker \
     mako \
     playerctl \
     polkit-gnome \
@@ -90,7 +50,7 @@ yay -S --noconfirm \
     xdg-desktop-portal-hyprland
 ```
 
-### Enable SDDM (Wayland)
+### Enable SDDM
 
 ```bash
 sudo systemctl enable sddm.service
@@ -101,15 +61,21 @@ sudo systemctl enable sddm.service
 ```bash
 yay -S --noconfirm \
     alacritty \
-    asdf-vm \
+    btop \
+    bluetui \
+    dust \
+    fastfetch \
     git-delta \
     eza \
     fd \
     fzf \
-    noti \
     github-cli \
     glab \
+    gpu-screen-recorder \
+    impala \
+    lazydocker \
     lazygit \
+    mise \
     neovim \
     navi \
     jq \
@@ -127,7 +93,7 @@ yay -S --noconfirm \
 mkdir -p ~/.local/share/navi/cheats
 cd ~/.local/share/navi/cheats/
 git clone https://github.com/hschne/cheats.git hschne__cheats
-cd hschne__cheats && git remote set-url origin git@github.com:hschne/ruby-conferences.github.io.git
+cd hschne__cheats && git remote set-url origin git@github.com:hschne/cheats.git
 ```
 
 ### Terminal Tools & Plugins
@@ -145,7 +111,6 @@ yay -S --noconfirm \
     docker-compose \
     docker-buildx \
     firefox  \
-    libewolf-bin \
     chromium
 ```
 
@@ -170,22 +135,6 @@ yay -S --noconfirm \
     w3m
 ```
 
-### X11-only utilities
-
-```bash
-yay -S --noconfirm \
-    dua-cli \
-    flameshot \
-    htop \
-    neofetch \
-    network-manager-applet \
-    redshift \
-    xclip \
-    xpastemouseblock \
-    xorg-xrdb \
-    xorg-xrandr
-```
-
 ```bash
 sudo systemctl enable NetworkManager.service
 ```
@@ -195,8 +144,7 @@ sudo systemctl enable NetworkManager.service
 ```bash
 yay -S --noconfirm \
     bluez \
-    bluez-utils \
-    blueman
+    bluez-utils
 ```
 
 ```bash
@@ -206,7 +154,7 @@ systemctl enable bluetooth.service
 
 ### Audio
 
-Install pipewire and related required utilities. For all full guide see [PipeWireWire Guide](https://github.com/mikeroyal/PipeWire-Guide).
+Install pipewire and related required utilities. For a full guide see [PipeWire Guide](https://github.com/mikeroyal/PipeWire-Guide).
 
 ```bash
 yay -S --noconfirm \
@@ -216,7 +164,7 @@ yay -S --noconfirm \
     mda.lv2 \
     pavucontrol \
     pipewire \
-    pipwire-audio \
+    pipewire-audio \
     pipewire-pulse \
     wireplumber \
     zam-plugins-lv2
@@ -279,7 +227,7 @@ mkdir ~/Source
 sudo chsh -s "/bin/zsh" "$USER"
 ```
 
-# Ranger
+## Ranger
 
 ```bash
 git clone https://github.com/alexanderjeurissen/ranger_devicons.git ~/.config/ranger/plugins/ranger_devicons
@@ -294,37 +242,17 @@ git clone https://github.com/tmux-plugins/tpm.git  "$tpm_root"
 "$tpm_root/scripts/install_plugins.sh"
 ```
 
-### Install Node, Ruby & Python (asdf)
+## Install Languages (mise)
+
+Add mise to your shell config (`~/.zshrc`):
 
 ```bash
-asdf plugin add ruby
-asdf install ruby $(asdf latest ruby)
-asdf set -u ruby $(asdf latest ruby)
-
-# Python
-asdf plugin add python
-asdf install python $(asdf latest python)
-asdf set -u python $(asdf latest python)
-
-# Node
-asdf plugin add nodejs
-asdf install nodejs $(asdf latest nodejs)
-asdf set -u nodejs $(asdf latest nodejs)
-
-# Go
-asdf plugin add golang
-asdf install golang $(asdf latest golang)
-asdf set -u golang $(asdf latest golang)
+echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
 ```
 
-### Install Node, Ruby & Python (mise - recommended)
+Install languages:
 
 ```bash
-yay -S --noconfirm mise
-
-# Add to shell config (~/.zshrc)
-# eval "$(mise activate zsh)"
-
 mise use -g ruby@latest
 mise use -g python@latest
 mise use -g node@latest
@@ -342,6 +270,21 @@ yay -S --noconfirm \
     ttf-material-icons-git
 ```
 
+## Icons & Themes
+
+```bash
+yay -S --noconfirm \
+    arc-gtk-theme \
+    papirus-icon-theme \
+    papirus-folders
+```
+
+```bash
+gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
+gsettings set org.gnome.desktop.interface gtk-theme "Arc-Dark"
+papirus-folders -C black --theme Papirus-Dark
+```
+
 ## Docker
 
 ```bash
@@ -356,9 +299,68 @@ sudo systemctl enable reflector.service reflector.timer
 sudo systemctl start reflector.service reflector.timer
 ```
 
-## Redshift
+## IWD + NetworkManager + Impala
+
+Impala is a TUI for managing WiFi that requires iwd. By default, NetworkManager uses wpa_supplicant for WiFi. To use impala, configure NetworkManager to use iwd as its backend instead.
+
+**The players:**
+
+| Tool               | Role                                                     |
+| ------------------ | -------------------------------------------------------- |
+| **wpa_supplicant** | WiFi authentication daemon (old default)                 |
+| **iwd**            | WiFi authentication daemon (modern, faster, less memory) |
+| **NetworkManager** | Network management (WiFi, Ethernet, VPN, etc.)           |
+
+Using **NetworkManager + iwd** gives you the best of both worlds: faster WiFi with full NetworkManager features.
+
+### Install
 
 ```bash
-systemctl --user enable redshift.service
-systemctl --user start redshift.service
+yay -S --noconfirm \
+    iwd \
+    impala
 ```
+
+### Switch from wpa_supplicant to iwd
+
+```bash
+# Stop and disable wpa_supplicant
+sudo systemctl stop wpa_supplicant
+sudo systemctl disable wpa_supplicant
+
+# Configure NetworkManager to use iwd backend
+echo -e "[device]\nwifi.backend=iwd" | sudo tee /etc/NetworkManager/conf.d/iwd.conf
+
+# Enable iwd and restart NetworkManager
+sudo systemctl enable --now iwd
+sudo systemctl restart NetworkManager
+```
+
+### Troubleshooting Auto-Connect
+
+When using iwd as the WiFi backend for NetworkManager, auto-connect issues can occur due to duplicate connection profiles.
+
+### Check for Duplicate Profiles
+
+After setting up iwd + NetworkManager, interface names may change (e.g., `wlp1s0` → `wlan0`). This can leave stale profiles pointing to non-existent interfaces:
+
+```bash
+nmcli connection show | grep wifi
+```
+
+If you see duplicates (e.g., "Network" and "Network 1"), check which interface each is bound to:
+
+```bash
+nmcli connection show "Network" | grep interface-name
+nmcli connection show "Network 1" | grep interface-name
+```
+
+### Fix: Delete Stale Profiles
+
+Delete profiles bound to old/non-existent interfaces:
+
+```bash
+nmcli connection delete "Network"
+```
+
+Keep the profile that matches your current interface (`wlan0` when using iwd).
