@@ -128,7 +128,7 @@ yay -S --noconfirm \
     networkmanager \
     mariadb-libs \
     p7zip \
-    ranger \
+    lf \
     reflector \
     silicon \
     unzip \
